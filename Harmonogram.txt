@@ -1,0 +1,28 @@
+01  - J - Wczytywanie obrazka
+02  - D - GUI i szablony
+03  - P - Funkcja zaznaczenia i wyciêcia fragmentu zdjêcia
+04  - P - Wyciêcie tytu³u, podpisu osi, wartoœci osi i legendy
+04* -   - Automatycznie
+05  - M - Transformata Hougha + wykrywanie ramki
+06  - M - Manualne wykrycie ramki
+07  - J - OCR
+08  - J - Analiza i wydobycie informacji z legendy, skala osi + tytu³
+09  - ? - obrót
+10  - D - Digitalizacja: wykres liniowy
+11  - D - Digitalizacja: wykres punktowy
+
+
+
+
+-------------------------------------------------
+Dyskusja:
+-------------------------------------------------
+
+01 - Zaraz po wczytaniu obrazka, trzeba poprosiæ u¿ytkownika o zaznaczenie jedynie danych o wykresie, gdy¿ na niektórych przyk³adach widoczny jest jeszcze fragment jakiegoœ artyku³u. Tego siê trzeba pozbyæ, przed dalsz¹ obróbk¹.
+
+05 - ramka mo¿e nie istnieæ (czyli nie mieæ prawej i górnej krawêdzi, a jedynie osie). Mo¿e by staraæ siê wykrywaæ tylko te osie? I jak to ju¿ bêdzie to dopiero krawêdzie, których mo¿e nie byæ.
+
+09 - nikt nie wzi¹³ obrotu ramki.
+
+
+

@@ -1,0 +1,34 @@
+Konwencja:  
+
+   Nazwy klas i interface:   PisaneTymSposobem
+   Nazwy metod i zmiennych:  pisaneTymSposobem
+   Nazwy sta³ych:            PISANE_TYM_SPOSOBEM   (final static)
+
+
+Dokumentacja JavaDoc:
+
+   Opis zaraz przed klas¹ lub metod¹.
+  
+   Opis pomiêdzy /** a */
+
+   @param parametr opis
+
+   @return opis
+
+
+Paczki:
+
+   Proponuje 4 package:
+     - Platform - tutaj umieœimy g³ówny program, klasy itd, inne w zale¿noœci czy Win / Android.
+     - GD - skrót od GraphDigitizer. 
+            Tutaj ca³a logika programu, klasy, metody do wykonania w³aœciwej roboty.
+     - GUI - klasy zwi¹zane z rysowaniem i obs³ug¹ GUI
+     - Aux - klasy pomocniczne, takie jak np. klasy w³asnych wyj¹tków (jeœli bêd¹) itd. 
+             Wszystko co nie jest bezpoœrednio zwi¹zane z digitalizacj¹.
+             Proponujê umieœciæ tutaj te¿ plik Common.java gdzie bêdziemy wrzucaæ wszystkie sta³e,
+             które maj¹ byæ u¿ywane przez ró¿ne klasy, dziêki temu wystarczy imporotwaæ tylko ten plik.
+
+
+
+
+
