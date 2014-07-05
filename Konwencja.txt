@@ -2,14 +2,14 @@ Konwencja:
 
    Nazwy klas i interface:   PisaneTymSposobem
    Nazwy metod i zmiennych:  pisaneTymSposobem
-   Nazwy sta³ych:            PISANE_TYM_SPOSOBEM   (final static)
+   Nazwy staï¿½ych:            PISANE_TYM_SPOSOBEM   (final static)
 
 
 Dokumentacja JavaDoc:
 
-   Opis zaraz przed klas¹ lub metod¹.
+   Opis zaraz przed klasï¿½ lub metodï¿½.
   
-   Opis pomiêdzy /** a */
+   Opis pomiï¿½dzy /** a */
 
    @param parametr opis
 
@@ -19,14 +19,14 @@ Dokumentacja JavaDoc:
 Paczki:
 
    Proponuje 4 package:
-     - Platform - tutaj umieœimy g³ówny program, klasy itd, inne w zale¿noœci czy Win / Android.
-     - GD - skrót od GraphDigitizer. 
-            Tutaj ca³a logika programu, klasy, metody do wykonania w³aœciwej roboty.
-     - GUI - klasy zwi¹zane z rysowaniem i obs³ug¹ GUI
-     - Aux - klasy pomocniczne, takie jak np. klasy w³asnych wyj¹tków (jeœli bêd¹) itd. 
-             Wszystko co nie jest bezpoœrednio zwi¹zane z digitalizacj¹.
-             Proponujê umieœciæ tutaj te¿ plik Common.java gdzie bêdziemy wrzucaæ wszystkie sta³e,
-             które maj¹ byæ u¿ywane przez ró¿ne klasy, dziêki temu wystarczy imporotwaæ tylko ten plik.
+     - Platform - tutaj umieï¿½imy gï¿½ï¿½wny program, klasy itd, inne w zaleï¿½noï¿½ci czy Win / Android.
+     - GD - skrï¿½t od GraphDigitizer. 
+            Tutaj caï¿½a logika programu, klasy, metody do wykonania wï¿½aï¿½ciwej roboty.
+     - GUI - klasy zwiï¿½zane z rysowaniem i obsï¿½ugï¿½ GUI
+     - Supp - klasy pomocniczne, takie jak np. klasy wï¿½asnych wyjï¿½tkï¿½w (jeï¿½li bï¿½dï¿½) itd. 
+              Wszystko co nie jest bezpoï¿½rednio zwiï¿½zane z digitalizacjï¿½.
+              Proponujï¿½ umieï¿½ciï¿½ tutaj teï¿½ plik Common.java gdzie bï¿½dziemy wrzucaï¿½ wszystkie staï¿½e,
+              ktï¿½re majï¿½ byï¿½ uï¿½ywane przez rï¿½ne klasy, dziï¿½ki temu wystarczy imporotwaï¿½ tylko ten plik.
 
 
 
