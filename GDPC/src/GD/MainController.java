@@ -23,6 +23,7 @@ public class MainController extends Thread
 		{
 			if (isChangeReady)
 			{
+				System.out.println("tak");
 				isChangeReady = false;
 				currentCtrl = crtlToChange;
 

@@ -64,6 +64,12 @@ public class MenuCrtl extends Controller
 			case GUIAction.BUTTON_CLICK:
 				if (e.id.equals(ID_BUT_EXIT))
 					System.exit(0);
+				if (e.id.equals(ID_BUT_DIGIT))
+				{
+					Main.main.mainCrtl.chageController(new kontr());
+				}
+				
+				
 			break;
 		}
 	}
