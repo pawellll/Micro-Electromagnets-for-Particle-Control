@@ -6,46 +6,19 @@ import Platform.Main;
  * Klasa, ktora jest glownym kontrolerem, obsluguje przekazywanie kontroli
  * innym kontrolerom.
  */
-public class MainController extends Thread
+public class MainController
 {
-	public Controller currentCtrl = null;
+	public Controller currentCtrl = new MenuCrtl();
 	
-	
-	private boolean runThread = true;
-
-	private Boolean isChangeReady = true;
-	private Controller crtlToChange = new MenuCrtl();
-	
-	@Override
-	public void run()
+	public void start()
 	{
-		while (runThread)
-		{
-			synchronized (isChangeReady)
-			{
-				if (isChangeReady)
-				{
-					isChangeReady = false;
-					currentCtrl = crtlToChange;
-
-					currentCtrl.setCurrent(Main.main.GUI);
-				}
-			}
-		}
+		currentCtrl.setCurrent(Main.main.GUI);
 	}
 	
-	synchronized void quit()
+	void chageController(Controller controller)
 	{
-		runThread = false;
-	}
-	
-	synchronized void chageController(Controller controller)
-	{
-		crtlToChange = controller;
-		synchronized (isChangeReady)
-		{
-			isChangeReady = true;
-		}
+		currentCtrl = controller;
+		currentCtrl.setCurrent(Main.main.GUI);
 	}
 	
 }
