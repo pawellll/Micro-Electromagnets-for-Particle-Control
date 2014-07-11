@@ -13,24 +13,27 @@ public class MainController extends Thread
 	
 	private boolean runThread = true;
 
-	private boolean isChangeReady = true;
+	private Boolean isChangeReady = true;
 	private Controller crtlToChange = new MenuCrtl();
 	
 	@Override
 	public void run()
-	{
-		while (runThread)
-		{
-			if (isChangeReady)
-			{
-				System.out.println("tak");
-				isChangeReady = false;
-				currentCtrl = crtlToChange;
-
-				currentCtrl.setCurrent(Main.main.GUI);
-			}
-		}
-	}
+        {
+                while (runThread)
+                {
+                        synchronized (isChangeReady)
+                        {
+                                if (isChangeReady)
+                                {
+                                        System.out.println("tak");
+                                        isChangeReady = false;
+                                        currentCtrl = crtlToChange;
+ 
+                                        currentCtrl.setCurrent(Main.main.GUI);
+                                }
+                        }
+                }
+        }
 	
 	synchronized void quit()
 	{
