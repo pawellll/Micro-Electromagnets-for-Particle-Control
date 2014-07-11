@@ -18,22 +18,21 @@ public class MainController extends Thread
 	
 	@Override
 	public void run()
-        {
-                while (runThread)
-                {
-                        synchronized (isChangeReady)
-                        {
-                                if (isChangeReady)
-                                {
-                                        System.out.println("tak");
-                                        isChangeReady = false;
-                                        currentCtrl = crtlToChange;
- 
-                                        currentCtrl.setCurrent(Main.main.GUI);
-                                }
-                        }
-                }
-        }
+	{
+		while (runThread)
+		{
+			synchronized (isChangeReady)
+			{
+				if (isChangeReady)
+				{
+					isChangeReady = false;
+					currentCtrl = crtlToChange;
+
+					currentCtrl.setCurrent(Main.main.GUI);
+				}
+			}
+		}
+	}
 	
 	synchronized void quit()
 	{
@@ -43,7 +42,10 @@ public class MainController extends Thread
 	synchronized void chageController(Controller controller)
 	{
 		crtlToChange = controller;
-		isChangeReady = true;
+		synchronized (isChangeReady)
+		{
+			isChangeReady = true;
+		}
 	}
 	
 }

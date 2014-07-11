@@ -15,6 +15,18 @@ public class Dim
 		h = height;
 	}
 	
+	/**Zamienia wymiary X podane w pikselach na wartosc w procentach. */
+	public static double dblX(double dimX)
+	{
+		return (double)dimX/w*100.0;
+	}
+	
+	/**Zamienia wymiary Y podane w pikselach na wartosc w procentach. */	
+	public static double dblY(double dimY)
+	{
+		return (double)dimY/h*100.0;
+	}			
+	
 	/**Zamienia wymiary X podane w procentach na wartosc w pikselach. */
 	public static int X(double dimX)
 	{

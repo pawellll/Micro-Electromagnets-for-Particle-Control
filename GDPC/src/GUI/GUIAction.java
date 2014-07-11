@@ -7,6 +7,8 @@ public class GUIAction
 {
 	public static final int BUTTON_CLICK = 0;
 	public static final int KEY_TYPED = 1;
+	public static final int IMG_CLICK = 2;
+	public static final int IMG_SELECTED = 3;
 		
 	public String id;
 	public int action;

@@ -84,7 +84,7 @@ public class GUIMain
 		{
 			if (temp.focusable)
 				focused = temp;
-			temp.onMouseDown(Dim.X(x)-temp.x, Dim.Y(y)-temp.y);
+			temp.onMouseDown(x, y);
 		}
 	}
 		
@@ -107,7 +107,7 @@ public class GUIMain
 				last.onMouseEnter();
 			}
 			
-			temp.onMouseMove(x-temp.x, y-temp.y);		
+			temp.onMouseMove(x, y);		
 		}
 		else
 		if (last!=null)
@@ -117,18 +117,27 @@ public class GUIMain
 		}
 	}
 	
+	public void onMouseDragged(int x, int y)
+	{
+		GUIComponent temp = getComponentAtXY(x, y);
+		if (temp!=null)
+		{
+			temp.onMouseDragged(x, y);		
+		}
+	}
+		
 	public void onMouseUp(int x, int y)
 	{
 		GUIComponent temp = getComponentAtXY(x, y);
 		if (temp!=null)
-			temp.onMouseUp(x-temp.x, y-temp.y);		
+			temp.onMouseUp(x, y);		
 	}
 	
 	public void onMouseClick(int x, int y)
 	{
 		GUIComponent temp = getComponentAtXY(x, y);
 		if (temp!=null)
-			temp.onMouseClick(x-temp.x, y-temp.y);		
+			temp.onMouseClick(x, y);		
 	}
 	
 	public void onKeyDown(char key)

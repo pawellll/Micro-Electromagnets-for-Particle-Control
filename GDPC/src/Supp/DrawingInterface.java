@@ -9,6 +9,7 @@ public interface DrawingInterface
 {  
   //Kolory
     void gSetColor(int newColor);
+    void gSetColor(int newColor, int Transparency);
     int gGetColor();
     
   //Czcionka

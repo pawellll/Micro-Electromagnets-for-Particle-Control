@@ -88,7 +88,9 @@ public class CrossSurface extends JPanel implements MouseListener, MouseMotionLi
 
 	@Override
 	public void mouseDragged(MouseEvent e)
-	{}
+	{
+		gui.onMouseDragged(e.getX(), e.getY());
+	}
 
 	@Override
 	public void mouseMoved(MouseEvent e)

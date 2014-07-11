@@ -94,6 +94,9 @@ public class GUIComponent
 		
 	public void onMouseMove(double x, double y)
 	{}
+		
+	public void onMouseDragged(double x, double y)
+	{}
 	
 	public void onMouseUp(double x, double y)
 	{}

@@ -31,7 +31,7 @@ public class GUIButton extends GUIComponent
 	}
 		
 	@Override
-	public void onMouseDown(double x, double y)
+	public void onMouseClick(double x, double y)
 	{
 		Main.main.mainCrtl.currentCtrl.onGUIAction(new GUIAction(id, GUIAction.BUTTON_CLICK, null));
 	}

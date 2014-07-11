@@ -23,7 +23,13 @@ public class CrossCanvas implements DrawingInterface
   public void gSetColor(int newColor) {
     c.setColor(new Color(newColor));
   }
-
+	
+  @Override
+  public void gSetColor(int newColor, int Transparency){
+		Color temp = new Color(newColor);
+    c.setColor(new Color(temp.getRed(), temp.getGreen(),temp.getBlue(), Transparency ));
+  }	
+    
   @Override
   public int gGetColor() {
     return c.getColor().getRGB();
