@@ -9,6 +9,12 @@ import Supp.Colors;
 import Supp.Comm;
 import Supp.Dim;
 import Supp.DrawingInterface;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Klasa kontrolera glownego menu.
@@ -66,14 +72,29 @@ public class MenuCrtl extends Controller
 					System.exit(0);
 				if (e.id.equals(ID_BUT_DIGIT))
 				{
-					Main.main.mainCrtl.chageController(new kontr());
+					openImage();
 				}
-				
-				
+				else
+					Main.main.mainCrtl.chageController(new DigitCrtl(null));
 			break;
 		}
 	}
 	
-	
+	        private void openImage() {
+        final JFileChooser fc = new JFileChooser();
+        FileFilter filter = new FileNameExtensionFilter("ImageFiles", "jpg", "jpeg", "png", "gif");
+        fc.setFileFilter(filter);
+        if (JFileChooser.APPROVE_OPTION == fc.showOpenDialog(null)) {
+            try {
+                Main.main.mainCrtl.chageController(new kontr(fc.getSelectedFile()));
+            } catch (IOException ex) {
+                System.err.println("Wybieraj jakis lepszy ten obrazek");
+                Logger.getLogger(MenuCrtl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            System.err.println("Wybieraj ten obrazek");
+        }
+
+    }
 	
 }
