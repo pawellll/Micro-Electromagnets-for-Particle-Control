@@ -90,7 +90,7 @@ public class GUIImage extends GUIComponent
 		
 		g.gStretchBitmap(getX(), getY(), Dim.X(w, minX), Dim.Y(h, minY), img, Comm.STRETCH_HV);
 	
-		if (selectable && selectStarted)
+		if (selectable && selectStarted && endX!=0 && endY!=0)
 		{
 			g.gSetColor(Colors.BLACK);
 			g.gDrawRectangle((int)Math.min(startX, endX) , (int)Math.min(startY, endY), (int)Math.abs(endX-startX), (int)(Math.abs(endY-startY)));
