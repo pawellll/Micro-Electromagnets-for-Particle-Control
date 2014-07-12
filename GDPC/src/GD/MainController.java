@@ -8,7 +8,7 @@ import Platform.Main;
  */
 public class MainController
 {
-	public Controller currentCtrl = new MenuCrtl();
+	public Controller currentCtrl = new MenuCtrll();
 	
 	public void start()
 	{

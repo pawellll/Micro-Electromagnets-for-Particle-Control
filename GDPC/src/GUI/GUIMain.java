@@ -63,6 +63,8 @@ public class GUIMain
 		{
 			componet.onPaint(g, width, height);
 		}		
+    
+    
 		
   }
 		

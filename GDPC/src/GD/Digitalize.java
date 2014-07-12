@@ -3,7 +3,10 @@ package GD;
 import Platform.CrossBitmap;
 import Supp.Colors;
 import java.awt.Color;
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,32 +14,46 @@ import java.util.Set;
  */
 public class Digitalize
 {
-	public static int[][] digiNormalColors(CrossBitmap graph, int[] colors)
+	public static List<Point>[] digiNormalColors(CrossBitmap graph, int[] colors)
 	{
 //		System.out.println(RGBDistance(new Color(134, 166, 65).getRGB(),new Color(188, 211, 138).getRGB()));
 //		System.out.println(RGBDistance(new Color(134, 166, 65).getRGB(),new Color(166, 115, 65).getRGB()));
 		
-		int color = Colors.RGB(1, 144, 101);
-		/*
-		for (int y = 0; y< graph.getHeight(); y++)
-			for (int x = 0; x< graph.getWidth(); x++)
-			{
-				if ((RGBDistance(Colors.WHITE, graph.getRGB(x, y))<50))
-					graph.setRGB(x, y, Colors.ORANGE);
-					
-//        Pos := (1 - (rad / r)) * power;
-//        p[X * 3] := round(((pj[X * 3] - p[X * 3]) * Pos) + p[X * 3]); 		
-				
-			}*/
-		Set<Color> palette = new HashSet<Color>();
-		palette.add(Color.WHITE);
-		palette.add(new Color(0, 143, 100));
-		palette.add(new Color(213, 72, 1));
-		palette.add(new Color(107, 96, 174));
-//						
-		graph = Quantization1.quantitize(graph, palette, 4);
+    List<Point>[] out = new ArrayList[colors.length-1];
+    for (int i=0; i<out.length; i++)
+      out[i] = new ArrayList<>();
+        
+    CrossBitmap bit = new CrossBitmap(CrossBitmap.newFrom(graph));
+    
+		int color; 
+    List<Integer> base;
 		
-		return null;
+    for (int i = 0; i<out.length; i++)
+    {
+      color = colors[i+1];
+      base = generateColorToWhite(color);
+      
+      for (int y = 0; y< graph.getHeight(); y++)
+        for (int x = 0; x< graph.getWidth(); x++)
+        {
+          if (RGBDistance(color, graph.getRGB(x, y))<50 || ColorToWhite(graph.getRGB(x, y), base) )
+            bit.setRGB(x, y, Colors.BLACK);
+          else
+            bit.setRGB(x, y, Colors.WHITE);
+        }
+      
+      bit = doKMM(bit);
+      
+      for (int x = 0; x< bit.getWidth(); x++)
+        for (int y = 0; y< bit.getHeight(); y++)
+          if (bit.getRGB(x, y)==Color.BLACK.getRGB())
+          {
+            out[i].add(new Point(x,y));
+            break;
+          }  
+    }
+
+		return out;
 	}
 					
 
@@ -46,10 +63,38 @@ public class Digitalize
 //******************************************************
 
 	
+  
+  
+  
 	public static double RGBDistance(int col1, int col2)
 	{
 		return Math.sqrt(Math.pow(Colors.getR(col1)-Colors.getR(col2), 2)+Math.pow(Colors.getG(col1)-Colors.getG(col2), 2)+Math.pow(Colors.getB(col1)-Colors.getB(col2), 2));
-	}
+	}	
+  
+	public static List<Integer> generateColorToWhite(int base)
+	{
+    List<Integer> out = new ArrayList<>();
+    int r,g,b;
+    for (int i=0; i<80; i++)
+    {
+      r = (int)(((255-Colors.getR(base)) * (double)i/100.0) + Colors.getR(base)); 	     
+      g = (int)(((255-Colors.getG(base)) * (double)i/100.0) + Colors.getG(base)); 	     
+      b = (int)(((255-Colors.getB(base)) * (double)i/100.0) + Colors.getB(base)); 
+      out.add(Colors.RGB(r, g, b));
+    }
+	
+		return out;
+  }
+	  
+  
+	public static boolean ColorToWhite(int tested, List<Integer> base)
+	{ 
+    for (Integer baseColor: base)
+      if (RGBDistance(baseColor, tested)<10)
+        return true;
+
+    return false;
+  }
 	
 	
 	
@@ -104,13 +149,15 @@ public class Digitalize
 
 		int [][] img = new int[width+1][height+1];
 		int [][] img_copy = new int[width+1][height+1];
+    
+    final int BLACK = new Color(0,0,0).getRGB();
 
 		CrossBitmap out = new CrossBitmap(CrossBitmap.newFrom(in));
 
 		for(int i = 0; i < width;i++)
 			for(int j = 0;j < height;j++)  
-				if (in.getRGB(i, j) == Colors.BLACK)
-				{
+				if (in.getRGB(i, j) == BLACK)
+				{ 
 					img[i+1][j+1]=1;
 					img_copy[i+1][j+1]=img[i+1][j+1];               
 				}

@@ -26,6 +26,10 @@ public class CrossBitmap {
         return img;
     }
 
+    public CrossCanvas getCanvas() {
+      return new CrossCanvas(img.createGraphics());
+    }
+    
     public void setBitmap(BufferedImage image) {
         img = image;
     }
@@ -45,14 +49,23 @@ public class CrossBitmap {
     public int getHeight() {
         return img.getHeight();
     }
-
+  
     public CrossBitmap getSubImage(int x, int y, int w, int h) {
-        return new CrossBitmap(img.getSubimage(x, y, w, h));
+        BufferedImage bitmap = new BufferedImage(w, h, img.getType());
+        
+        for (int i = x; i < x+w; i++) {
+            for (int j = y; j < y+h; j++) {
+                bitmap.setRGB(i-x, j-y, img.getRGB(i, j));
+            }
+        }
+        
+        return new CrossBitmap(bitmap);
     }
     
     public BufferedImage getBufferedImage(){
-        return img;
+      return img;
     }
+
 
 		public CrossBitmap clone() 
 		{
