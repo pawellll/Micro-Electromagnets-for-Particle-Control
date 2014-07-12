@@ -13,6 +13,11 @@ public class CrossBitmap {
      */
     private BufferedImage img;
 
+		public static BufferedImage newFrom(CrossBitmap image)
+		{
+      return new BufferedImage(image.getWidth(), image.getHeight(), image.img.getType());
+    }	
+			
     public CrossBitmap(BufferedImage image) {
         img = image;
     }
@@ -49,4 +54,15 @@ public class CrossBitmap {
         return img;
     }
 
+		public CrossBitmap clone() 
+		{
+      BufferedImage out = new BufferedImage(img.getWidth(), img.getHeight(), img.getType());
+			
+			for (int y = 0; y< img.getHeight(); y++)
+				for (int x = 0; x< img.getWidth(); x++)
+					out.setRGB(x, y, img.getRGB(x, y));
+			
+			return new CrossBitmap(out);
+		}		
+		
 }   

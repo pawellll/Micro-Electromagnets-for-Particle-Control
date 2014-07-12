@@ -48,4 +48,12 @@ public class Comm
     public static final String R_F_ARR_RIGHT = "arrow_right.png";  		
     public static final String R_F_CHECK_OFF = "check_off.png";  		
     public static final String R_F_CHECK_ON  = "check_on.png";  		
+		
+	//legena, wykres, tytuly osi x,y, wartosci na osiach,x,y
+		public static final int D_BIT_LEGEND   = 0;
+		public static final int D_BIT_GRAPH    = 1;
+		public static final int D_BIT_TITLE_X  = 2;
+		public static final int D_BIT_TITLE_Y  = 3;
+		public static final int D_BIT_VALUES_X = 4;
+		public static final int D_BIT_VALUES_Y = 5;
 }

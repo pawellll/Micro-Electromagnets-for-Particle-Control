@@ -86,6 +86,9 @@ public class GUIImage extends GUIComponent
 	@Override
 	public void onPaint(DrawingInterface g, int width, int height)
 	{
+		if (img == null)
+			return;
+		
 		setStretchFlag(stretch);
 		
 		g.gStretchBitmap(getX(), getY(), Dim.X(w, minX), Dim.Y(h, minY), img, Comm.STRETCH_HV);
@@ -106,12 +109,17 @@ public class GUIImage extends GUIComponent
 	@Override
 	public void onMouseClick(double x, double y)
 	{
+		if (img == null)
+			return;
 		Main.main.mainCrtl.currentCtrl.onGUIAction(new GUIAction(id, GUIAction.IMG_CLICK, new DoublePoint(x,y)));	
 	}
 	
 	@Override
 	public void onMouseDown(double x, double y)
 	{
+		if (img == null)
+			return;
+		
 		if (selectable)
 		{		
 			startX = x;
@@ -124,6 +132,9 @@ public class GUIImage extends GUIComponent
 	@Override
 	public void onMouseDragged(double x, double y)
 	{
+		if (img == null)
+			return;
+		
 		if (selectable && selectStarted)
 		{
 			endX = x;
@@ -135,6 +146,9 @@ public class GUIImage extends GUIComponent
 	@Override
 	public void onMouseUp(double x, double y)
 	{
+		if (img == null)
+			return;
+		
 		if (selectable && selectStarted && endX!=0 && endY!=0)
 		{
 			Main.main.mainCrtl.currentCtrl.onGUIAction(new GUIAction(id, GUIAction.IMG_SELECTED, new DoubleArea(startX, startY, endX, endY)));	
