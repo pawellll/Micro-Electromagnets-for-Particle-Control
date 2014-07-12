@@ -1,5 +1,6 @@
 package Platform;
 
+import Supp.Colors;
 import java.awt.image.BufferedImage;
 
 /**
@@ -36,6 +37,22 @@ public class CrossBitmap {
 
     public int getRGB(int x, int y) {
         return img.getRGB(x, y);
+    }
+    
+    public int getIntComponent0(int x, int y) {
+        return Colors.getR(img.getRGB(x, y));
+    }
+    
+    public int getIntComponent1(int x, int y) {
+        return Colors.getG(img.getRGB(x, y));
+    }
+    
+    public int getIntComponent2(int x, int y) {
+        return Colors.getB(img.getRGB(x, y));
+    }
+    
+    public void setIntColor(int x, int y, int r, int g, int b) {
+        img.setRGB(x, y, Colors.RGB(r, g, b));
     }
 
     public void setRGB(int x, int y, int color) {
