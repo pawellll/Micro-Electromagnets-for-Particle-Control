@@ -39,19 +39,19 @@ public class CutCtrll extends Controller {
           switch (i+1)
           {
             case Comm.D_BIT_GRAPH:
-              System.out.println("Prosze wybrac wykres.");
+              gui.setInfo("Prosze wybrac wykres.");
              break;
             case Comm.D_BIT_TITLE_X:
-              System.out.println("Prosze wybrac tytul osi X.");
+              gui.setInfo("Prosze wybrac tytul osi X.");
              break;
             case Comm.D_BIT_TITLE_Y:
-              System.out.println("Prosze wybrac  tytul osi Y.");
+              gui.setInfo("Prosze wybrac  tytul osi Y.");
              break;
             case Comm.D_BIT_VALUES_X:
-              System.out.println("Prosze wybrac wartosci osi X.");
+              gui.setInfo("Prosze wybrac wartosci osi X.");
              break;
             case Comm.D_BIT_VALUES_Y:
-              System.out.println("Prosze wybrac wartosci tytul osi Y.");
+              gui.setInfo("Prosze wybrac wartosci tytul osi Y.");
              break;
           }
           
@@ -116,7 +116,8 @@ public class CutCtrll extends Controller {
         imgHolder.setSelectable();
         gui.addComponent(imgHolder);
               
-        System.out.println("Prosze wybrac legende.");        
+        ///System.out.println("Prosze wybrac legende.");
+        gui.setInfo("Prosze wybrac legende.");
     }
 
     private void setColor(int x, int y, int w, int h, int color) {

@@ -2,6 +2,7 @@ package GUI;
 
 import Platform.Main;
 import Supp.Colors;
+import Supp.Comm;
 import Supp.Dim;
 import Supp.DrawingInterface;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class GUIMain
 	private final List<GUIComponent> components = new ArrayList<>();
 	private GUIComponent focused = null;
 	private GUIComponent last = null;
+  private String info = "";
 	
 	public void clearComponents()
 	{
@@ -42,6 +44,11 @@ public class GUIMain
 		components.add(newComponent);
 		Main.main.canvas.paint();
 	}
+  
+  public void setInfo(String info)
+  {
+    this.info = info;
+  }
   
   public void onDraw(DrawingInterface g, int w, int h)
   {
@@ -64,6 +71,14 @@ public class GUIMain
 			componet.onPaint(g, width, height);
 		}		
     
+    if (!info.isEmpty())
+    {
+      g.gSetColor(0, 128);
+      g.gFillRectangle(0, 0, w, h);     
+      g.gSetColor(C_GREEN);  
+      g.gSetFontSize(Dim.Y(10));
+      g.gDrawText(0, 0, w, h, info, Comm.ALIGN_CENTER | Comm.ALIGN_VCENTER);
+    }
     
 		
   }
@@ -81,6 +96,11 @@ public class GUIMain
 	
 	public void onMouseDown(int x, int y)
 	{
+    if (!info.isEmpty())
+    {
+      info = "";
+      return;
+    }
 		GUIComponent temp = getComponentAtXY(x, y);
 		if (temp!=null)
 		{
