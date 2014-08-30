@@ -5,6 +5,9 @@ import Supp.DrawingInterface;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.Stroke;
 
 /**
  * Klasa opakowujaca dla Canvas lub Graphics2D w zaleznosci od platformy.
@@ -12,6 +15,10 @@ import java.awt.Graphics2D;
  */
 public class CrossCanvas implements DrawingInterface
 {
+  public static final int PLAIN  = 0;
+  public static final int BOLD   = 1;
+  public static final int ITALIC = 2;
+	
   private final Graphics2D c;
   
   public CrossCanvas(Graphics2D canvas)
@@ -54,6 +61,19 @@ public class CrossCanvas implements DrawingInterface
   public int gGetFontSize() {
     return c.getFont().getSize();
   }
+	
+	@Override
+	public void gSetFontSize(String text, double width, double height)
+	{
+		int fontSize = 1;
+		while (true)
+		{
+			c.setFont(new Font(c.getFont().getName(), c.getFont().getStyle(), fontSize));
+			if (c.getFontMetrics().getHeight()>=height || c.getFontMetrics().stringWidth(text)>=width)
+				break;
+			fontSize++;
+		}	
+	}
 
   @Override
   public int gGetTextWidth(String text) {
@@ -218,5 +238,19 @@ public class CrossCanvas implements DrawingInterface
 		
     c.drawImage(bitmap.getBitmap(), nx, ny, nw, nh, null);
   }
+
+	@Override
+	public void gSetAntialiasing()
+	{
+		c.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+		RenderingHints.VALUE_ANTIALIAS_ON);
+		c.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+		RenderingHints.VALUE_INTERPOLATION_BILINEAR);	
+		
+		c.setRenderingHint(RenderingHints.KEY_DITHERING,
+		RenderingHints.VALUE_DITHER_ENABLE);	
+		
+		
+	}
   
 }

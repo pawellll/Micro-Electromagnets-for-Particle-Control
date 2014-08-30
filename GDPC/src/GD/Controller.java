@@ -9,6 +9,7 @@ import Supp.DrawingInterface;
  */
 public class Controller
 {
+	public boolean executeOnLost = false;
 	protected GUIMain gui;
 	
 	public void setCurrent(GUIMain GUI)
@@ -21,10 +22,17 @@ public class Controller
 	public void onSetCurrent()
 	{}
 	
+	public void onLostControl()
+	{}
+	
 	//Zdarzenia komponentow GUI
 	public void onGUIAction(GUIAction e)
 	{}
 	
 	public void onPaint(DrawingInterface g, int width, int height)
 	{}
+	
+	public void onAfterPaint(DrawingInterface g, int width, int height)
+	{}
+	
 }

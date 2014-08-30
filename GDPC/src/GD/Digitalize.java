@@ -1,6 +1,7 @@
 package GD;
 
 import Platform.CrossBitmap;
+import Platform.Main;
 import Supp.Colors;
 import java.awt.Color;
 import java.awt.Point;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import ocr.OCRPlugin;
 
 /**
  * Klasa realizujaca cala logike digitalizacji wykresu. 
@@ -94,6 +96,16 @@ public class Digitalize
         return true;
 
     return false;
+  }
+	
+		 
+	public static int[] legendAnalize(CrossBitmap legend)
+	{ 
+    OCRPlugin temp = new OCRPlugin(legend);
+    temp.extractText();
+    System.out.println(temp.getText());
+
+    return null;
   }
 	
 	

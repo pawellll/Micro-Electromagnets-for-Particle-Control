@@ -48,10 +48,10 @@ public class GUIComponent
     int nx = Dim.X(x);
 
     if ((align & Comm.ALIGN_CENTER) == Comm.ALIGN_CENTER)
-      nx = Dim.X(x) + (int)(Dim.X(contWidth)/2.0) - (int)(Dim.X(w, minX)/2.0);
+      nx = Dim.X(x) + (int)(Dim.W(contWidth)/2.0) - (int)(Dim.W(w, minX)/2.0);
     else
     if ((align & Comm.ALIGN_RIGHT) == Comm.ALIGN_RIGHT)
-      nx = Dim.X(x) + Dim.X(contWidth) - Dim.X(w, minX); 
+      nx = Dim.X(x) + Dim.W(contWidth) - Dim.W(w, minX); 
     
 		return nx;
 	}
@@ -61,10 +61,10 @@ public class GUIComponent
     int ny = Dim.Y(y);
     
     if ((align & Comm.ALIGN_VCENTER) == Comm.ALIGN_VCENTER)
-      ny = Dim.Y(y) + (int)(Dim.Y(contHeight)/2.0) - (int)(Dim.Y(h, minY)/2.0);
+      ny = Dim.Y(y) + (int)(Dim.H(contHeight)/2.0) - (int)(Dim.H(h, minY)/2.0);
     else
     if ((align & Comm.ALIGN_BOTTOM) == Comm.ALIGN_BOTTOM)
-      ny = Dim.Y(y) + Dim.Y(contHeight) - Dim.Y(h, minY);
+      ny = Dim.Y(y) + Dim.H(contHeight) - Dim.H(h, minY);
 		
 		return ny; 		
 	}
@@ -107,7 +107,7 @@ public class GUIComponent
 	public void onKeyDown(int key)
 	{}
 		
-	public void onKeyTyped(int key)
+	public void onKeyTyped(char key)
 	{}
 	
 	public void onKeyUp(int key)

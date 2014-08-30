@@ -9,16 +9,19 @@ public interface DrawingInterface
 {  
   //Kolory
     void gSetColor(int newColor);
-    void gSetColor(int newColor, int Transparency);
+    void gSetColor(int newColor, int transparency);
     int gGetColor();
     
   //Czcionka
     void gSetFontName(String newName);
     void gSetFontSize(int newSize);
     void gSetFontStyle(int newStyle);
+		/** Zwraca wielkosc czcionki, aby tekst nie przekraczal danych wymiarow */			
+		void gSetFontSize(String text, double width, double height);
     int gGetFontSize();
     int gGetTextWidth(String text);
     int gGetTextHeight();
+		void gSetAntialiasing();
     
   //Piksele
     void gSetPixel(int x, int y, int color);

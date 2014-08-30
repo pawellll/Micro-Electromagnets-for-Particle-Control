@@ -18,9 +18,10 @@ public class GUIImage extends GUIComponent
 	private CrossBitmap img = null;
 	private int stretch = Comm.STRETCH_HV;
 	private boolean selectable = false;
+  private boolean clickable = false;
 	private boolean selectStarted = false;
 	
-	private double startX, startY, endX, endY;
+	private double startX, startY, endX, endY, tempX, tempY;
 	
 	public GUIImage(String id, double x, double y, double width, double height)
 	{
@@ -38,13 +39,13 @@ public class GUIImage extends GUIComponent
     
 		if (stretchFlag == Comm.STRETCH_H_PROP)
 		{
-			nh = Dim.dblY((double)nh*(double)Dim.X(w)/nw);
+			nh = Dim.dblY((double)nh*(double)Dim.W(w)/nw);
 			nw = w;
 		}
 		else
 		if (stretchFlag == Comm.STRETCH_V_PROP)
 		{
-			nw = Dim.dblX((double)nw*(double)Dim.Y(h)/nh);
+			nw = Dim.dblX((double)nw*(double)Dim.H(h)/nh);
 			nh = h;
 		}
 		else
@@ -76,10 +77,16 @@ public class GUIImage extends GUIComponent
 	
 	public void setSelectable()
 	{
+    focusable = true;
 		selectable = true;
 		selectStarted = false;
 		endX = 0;
 		endY = 0;
+	}
+		
+	public void setClickable(boolean status)
+	{
+    clickable = status;
 	}
 	
 	
@@ -91,19 +98,23 @@ public class GUIImage extends GUIComponent
 		
 		setStretchFlag(stretch);
 		
-		g.gStretchBitmap(getX(), getY(), Dim.X(w, minX), Dim.Y(h, minY), img, Comm.STRETCH_HV);
+		g.gStretchBitmap(getX(), getY(), Dim.W(w, minX), Dim.H(h, minY), img, Comm.STRETCH_HV);
 	
 		if (selectable && selectStarted && endX!=0 && endY!=0)
 		{
-			g.gSetColor(Colors.BLACK);
-			g.gDrawRectangle((int)Math.min(startX, endX) , (int)Math.min(startY, endY), (int)Math.abs(endX-startX), (int)(Math.abs(endY-startY)));
-			g.gSetColor(Colors.WHITE);
-			g.gDrawRectangle((int)Math.min(startX, endX)+1, (int)Math.min(startY, endY)+1, (int)Math.abs(endX-startX)-2, (int)(Math.abs(endY-startY))-2);
-			
 			g.gSetColor(Colors.GREEN, 128);
-			g.gFillRectangle((int)Math.min(startX, endX)+2, (int)Math.min(startY, endY)+2, (int)Math.abs(endX-startX)-3, (int)(Math.abs(endY-startY))-3);
-		
+			g.gFillRectangle((int)Math.min(startX, endX), (int)Math.min(startY, endY), (int)Math.abs(endX-startX), (int)(Math.abs(endY-startY)));
+			
+      g.gSetColor(Colors.BLACK);
+			g.gDrawRectangle((int)Math.min(startX, endX) , (int)Math.min(startY, endY), (int)Math.abs(endX-startX), (int)(Math.abs(endY-startY)));
 		}
+    else
+    if (selectable && tempX!=0 && tempY!=0)
+    {	
+			g.gSetColor(Colors.GREEN, 128);
+			g.gDrawLine(getX(), (int)tempY, getX()+Dim.W(w, minX), (int)tempY);
+			g.gDrawLine((int)tempX, getY(), (int)tempX, getY()+Dim.H(h, minY));
+    }
 	}
 		
 	@Override
@@ -142,13 +153,21 @@ public class GUIImage extends GUIComponent
 			Main.main.canvas.paint();
 		}
 	}
+  
+  @Override
+  public void onMouseMove(double x, double y)
+  {
+    tempX = x;
+    tempY = y;
+		Main.main.canvas.paint();
+  }
 	
 	@Override
 	public void onMouseUp(double x, double y)
 	{
 		if (img == null)
 			return;
-		
+    
 		if (selectable && selectStarted && endX!=0 && endY!=0)
 		{
 			Main.main.mainCrtl.currentCtrl.onGUIAction(new GUIAction(id, GUIAction.IMG_SELECTED, new DoubleArea(startX, startY, endX, endY)));	
@@ -157,6 +176,35 @@ public class GUIImage extends GUIComponent
 			endY = 0;
 			Main.main.canvas.paint();
 		}
+	}
+  
+  @Override
+  public void onKeyDown(int key)
+  {
+    if (key==27)
+    {
+      selectStarted = false;
+      tempX = endX;
+      tempY = endY;
+			endX = 0;
+			endY = 0;
+			Main.main.canvas.paint();
+    }
+  }
+  
+
+	@Override
+	public void onMouseExit()
+	{
+    if (clickable)
+      changeCursor(Comm.CURSOR_DEF);
+	}
+
+	@Override
+	public void onMouseEnter()
+	{
+    if (clickable)
+      changeCursor(Comm.CURSOR_HAND);		 
 	}
 	
 	

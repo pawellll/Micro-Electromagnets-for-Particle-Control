@@ -13,6 +13,8 @@ import javax.swing.JFrame;
  */
 public class Main extends JFrame
 {                
+  public static final boolean ANDROID = false;
+  
 	public final MainController mainCrtl;
 	
   public final CrossSurface canvas;                
@@ -45,13 +47,18 @@ public class Main extends JFrame
 		mainCrtl = new MainController();
 
     pack(); 
+		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
   }
   
 	public void init()
 	{
 		mainCrtl.start();
 	}
-  
+	
+	public void Terminate()
+	{
+		System.exit(0);
+	}  
         
 	public static Main main;
   

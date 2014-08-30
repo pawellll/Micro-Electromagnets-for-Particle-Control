@@ -9,6 +9,8 @@ public class GUIAction
 	public static final int KEY_TYPED = 1;
 	public static final int IMG_CLICK = 2;
 	public static final int IMG_SELECTED = 3;
+	public static final int DROP_FILE = 4;
+	public static final int LIST_CHANGE = 5;
 		
 	public String id;
 	public int action;

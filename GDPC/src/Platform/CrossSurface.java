@@ -47,6 +47,10 @@ public class CrossSurface extends JPanel implements MouseListener, MouseMotionLi
 			case Comm.CURSOR_HAND:
 				setCursor (Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			break;
+		
+			case Comm.CURSOR_TEXT:
+				setCursor (Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
+			break;
 		}
 	}
 
@@ -55,7 +59,9 @@ public class CrossSurface extends JPanel implements MouseListener, MouseMotionLi
   {
     super.paintComponent(gr);
     Graphics2D g = (Graphics2D) gr.create();
-    gui.onDraw(new CrossCanvas(g), getWidth(), getHeight());    
+		CrossCanvas c = new CrossCanvas(g);
+		c.gSetAntialiasing();
+    gui.onDraw(c, getWidth(), getHeight());    
     
     g.dispose();
   }
@@ -98,6 +104,24 @@ public class CrossSurface extends JPanel implements MouseListener, MouseMotionLi
 		gui.onMouseMove(e.getX(), e.getY());
 	}
 
+	private int keyCode(int code)
+	{
+		switch (code)
+		{
+			case  37: return Comm.VK_LEFT; 
+			case  38: return Comm.VK_UP;
+			case  39: return Comm.VK_RIGHT;
+			case  40: return Comm.VK_DOWN;
+			case  10: return Comm.VK_ENTER;
+			case  27: return Comm.VK_ESC;			
+			case  32: return Comm.VK_SPC;			
+			case   8: return Comm.VK_BCKSPC;			
+			case 127: return Comm.VK_DEL;			
+		}
+		
+		return code;
+	}
+	
 	@Override
 	public void keyTyped(KeyEvent e)
 	{
@@ -106,14 +130,14 @@ public class CrossSurface extends JPanel implements MouseListener, MouseMotionLi
 
 	@Override
 	public void keyPressed(KeyEvent e)
-	{
-		gui.onKeyDown(e.getKeyChar());
+	{	
+		gui.onKeyDown(keyCode(e.getKeyCode()));
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
-		gui.onKeyUp(e.getKeyChar());
+		gui.onKeyUp(keyCode(e.getKeyCode()));
 	}
   
 }

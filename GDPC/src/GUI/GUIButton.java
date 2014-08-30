@@ -5,6 +5,8 @@ import Supp.Colors;
 import Supp.Comm;
 import Supp.Dim;
 import Supp.DrawingInterface;
+import Supp.Skin;
+import Supp.Str;
 import java.awt.Font;
 
 /**
@@ -13,18 +15,18 @@ import java.awt.Font;
 public class GUIButton extends GUIComponent
 {
 	private boolean active = false;
-	public String longestText = "WWWWWW";
+	public String longestText[] = {"Longest text","Longest text"};
 	
-	public String text = "";
+	public String text[] = {""};
 	public double font = 3;
 	
-	public GUIButton(String id, double x, double y, double width, double height, String text)
+	public GUIButton(String id, double x, double y, double width, double height, String text[])
 	{
 		super(id, x, y, width, height);
 		this.text = text;
 	}	
 	
-	public GUIButton(String id, double x, double y, double width, double height, String text, int minWidth, int minHeight)
+	public GUIButton(String id, double x, double y, double width, double height, String text[], int minWidth, int minHeight)
 	{
 		this(id, x, y, width, height, text);
 		setMin(minWidth, minHeight);
@@ -56,35 +58,43 @@ public class GUIButton extends GUIComponent
 	public void onPaint(DrawingInterface g, int width, int height)
 	{
 		if (active)
-			g.gSetColor(GUIMain.C_GREEN);
+			g.gSetColor(Skin.BCG_L);
 		else
-			g.gSetColor(GUIMain.C_GREEN_L);
+			g.gSetColor(Skin.BUTTON_OFF);
 		
-		g.gFillRoundedRectangle(getX(), getY(), Dim.X(w, minX), Dim.Y(h, minY), (int)(Dim.X(height)*0.005), (int)(Dim.X(height)*0.005));
+		g.gFillRoundedRectangle(getX(), getY(), Dim.W(w, minX), Dim.H(h, minY), 3, 3);
 
-		g.gSetColor(GUIMain.C_BORDER);
-		g.gDrawRoundedRectangle(getX(), getY(), Dim.X(w, minX), Dim.Y(h, minY), (int)(Dim.X(height)*0.005), (int)(Dim.X(height)*0.005));
-	
-		
-		g.gSetFontName("Arial");
-		
+		g.gSetColor(Skin.BUTTON_OFF);
+   
+		g.gDrawRoundedRectangle(getX(), getY(), Dim.W(w, minX), Dim.H(h, minY), 3, 3);
+		g.gDrawRectangle(getX()+1, getY()+1, Dim.W(w, minX)-2, Dim.H(h, minY)-2);
+ 
+		g.gSetFontName(Skin.FONT);
+		/*
 		int fontSize = 1;
 		while (true)
 		{
 			g.gSetFontSize(fontSize);
-			if (g.gGetTextHeight()>=Dim.Y(h, minY)*0.5 || g.gGetTextWidth(longestText)>=Dim.X(w, minX)*0.9)
+			if (g.gGetTextHeight()>=Dim.H(h, minY)*0.5 || g.gGetTextWidth(longestText)+6>=Dim.W(w, minX)*0.9)
 				break;
 			fontSize++;
-		}
+		}*/
 		
+		g.gSetFontSize(Str.get(longestText), Dim.W(w, minX)*0.9-6, Dim.H(h, minY)*0.5);
 		
 		if (active)
-			g.gSetColor(GUIMain.C_GRAY_L);
+			g.gSetColor(Skin.BCG_L);
 		else
-			g.gSetColor(Colors.DARK_GRAY);
+			g.gSetColor(Skin.BUTTON_TEXT_SHADOW);
+    
+		g.gDrawText(getX()+1, getY()+1, Dim.W(w, minX), Dim.H(h, minY), Str.get(text), Comm.ALIGN_CENTER | Comm.ALIGN_VCENTER);
 		
-		
-		g.gDrawText(getX(), getY(), Dim.X(w, minX), Dim.Y(h, minY), text, Comm.ALIGN_CENTER | Comm.ALIGN_VCENTER);
+		if (active)
+			g.gSetColor(Skin.BUTTON_OFF);
+		else
+			g.gSetColor(Skin.BUTTON_TEXT);
+				
+		g.gDrawText(getX(), getY(), Dim.W(w, minX), Dim.H(h, minY), Str.get(text), Comm.ALIGN_CENTER | Comm.ALIGN_VCENTER);
 	
 	}
 	
