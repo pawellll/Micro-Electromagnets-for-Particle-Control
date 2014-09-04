@@ -1,18 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package processing;
 
 import Platform.CrossBitmap;
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import Supp.DoubleArea;
+
 
 /**
- *
+ *  ||||||||||| Returns left upper corner, width and height in DoubleArea class
  * @author pawel
  */
 public class FrameDetecting {
@@ -20,12 +13,20 @@ public class FrameDetecting {
     private double[] sinTable;
     private double[] cosTable;
 
+    /*
     public CrossBitmap process(CrossBitmap image){
+        CrossBitmap transformedImage =  lineDetecting(image);
+        image = getFrame(image, transformedImage);
+        return setOpaque(image);
+    }
+    */
+    
+    public DoubleArea process(CrossBitmap image){
         CrossBitmap transformedImage =  lineDetecting(image);
         return getFrame(image, transformedImage);
     }
     
-    private CrossBitmap getFrame(CrossBitmap originalImage, CrossBitmap transformedImage) {
+    private DoubleArea getFrame(CrossBitmap originalImage, CrossBitmap transformedImage) {
         int halfHeight = (int) (transformedImage.getHeight()/2.0);
         int halfWidth = (int) (transformedImage.getWidth()/2.0);
         
@@ -33,49 +34,63 @@ public class FrameDetecting {
         int x1 = 0;
         int y0 = 0;
         int y1 = 0;
+        int i;
         
         
-        
-        for(int i=0;i<transformedImage.getWidth();++i){
-            if(transformedImage.getIntComponent0(halfHeight, i)==0){
+        for(i=0;i<transformedImage.getWidth();++i){
+            if(transformedImage.getIntComponent0(i,halfHeight)==0){
                 x0=i;
                 break;
             }
         }
-        for(int i=x0+50;i<transformedImage.getWidth();++i){
-            if(transformedImage.getIntComponent0(halfHeight, i)==0){
+        for(i=i+1;i<transformedImage.getWidth();++i){
+            if(transformedImage.getIntComponent0(i, halfHeight)==255){
+                break;
+            }
+        }
+        
+        for(i=i+1;i<transformedImage.getWidth();++i){
+            if(transformedImage.getIntComponent0(i,halfHeight)==0){
                 x1=i;
                 break;
             }
         }
+        ///////////////
         
-        
-        
-        for(int i=0;i<transformedImage.getHeight();++i){
-            if(transformedImage.getIntComponent0(i, halfWidth)==0){
+        for(i=0;i<transformedImage.getHeight();++i){
+            if(transformedImage.getIntComponent0(halfWidth,i)==0){
                 y0=i;
                 break;
             }
         }
-        for(int i=y0+50;i<transformedImage.getHeight();++i){
-            if(transformedImage.getIntComponent0(i, halfWidth)==0){
+        for(i=i+1;i<transformedImage.getHeight();++i){
+            if(transformedImage.getIntComponent0(halfWidth, i)==255){
+                break;
+            }
+        }
+        
+        for(i=i+1;i<transformedImage.getHeight();++i){
+            if(transformedImage.getIntComponent0(halfWidth,i)==0){
                 y1=i;
                 break;
             }
         }
-        int width = Math.abs(x1-x0);
-        int height = Math.abs(y1-y0);
+        ////////////
+        int width = Math.abs(x1-x0); // get width
+        int height = Math.abs(y1-y0); // get height
+        // get upper left corner
         int X = x1<x0 ? x1 : x0;
         int Y = y1<y0 ? y1 : y0;
-        System.err.println(x0+" "+y0+" "+x1+" "+y1);
-        return originalImage.getSubImage(X, Y, width, height);
+        
+        //return originalImage.getSubImage(X, Y, width, height);
+        return new DoubleArea(X, Y, width, height); // returns startPoint, width and height of frame
     }
 
     private CrossBitmap lineDetecting(CrossBitmap imageIn) {
         // get copy of imageIn
         CrossBitmap imageOut = imageIn.clone();
         // do the gray scale on a picture
-        grayScale(imageIn);
+        doGrayScale(imageIn);
         // amount of votes needed to recognise line
         int w = imageIn.getWidth();
         int h = imageIn.getHeight();
@@ -166,7 +181,7 @@ public class FrameDetecting {
         }
     }
 
-    private void setOpaque(CrossBitmap image) {
+    private CrossBitmap setOpaque(CrossBitmap image) {
         int r, g, b;
         final int alpha = 255; // set alpha to 255
         int color;
@@ -179,9 +194,10 @@ public class FrameDetecting {
                 image.setRGB(i, j, color);
             }
         }
+        return image;
     }
 
-    private void grayScale(CrossBitmap image) {
+    private void doGrayScale(CrossBitmap image) {
         int r, g, b;
         for (int i = 0; i < image.getWidth(); ++i) {
             for (int j = 0; j < image.getHeight(); ++j) {
