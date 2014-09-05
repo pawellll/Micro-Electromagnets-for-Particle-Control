@@ -6,6 +6,7 @@ import GUI.GUIAction;
 import GUI.GUIMain;
 import GUI.GUIProgress;
 import Supp.Comm;
+import Supp.ImageFile;
 import Supp.Str;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -22,6 +23,8 @@ import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -215,12 +218,12 @@ public class CrossRes
 		return "";
 	}
 	
-	private static List<CrossBitmap> loadImagesFromFiles(File[] files)
+	private static List<ImageFile> loadImagesFromFiles(File[] files)
 	{
 		if (files == null)
 			return null;
 		
-		List<CrossBitmap> imgs = new ArrayList<>();
+		List<ImageFile> imgs = new ArrayList<>();
 		
 		if (loadProgress != null)
 		{
@@ -233,7 +236,9 @@ public class CrossRes
 		{
 			CrossBitmap img = loadImg(file);
 			if (img != null)
-				imgs.add(img);
+			{
+				imgs.add(new ImageFile(img, getFileName(file.getAbsolutePath())));
+			}
 			
 			if (loadProgress != null)
 			{
@@ -245,14 +250,14 @@ public class CrossRes
 		return imgs;
 	}
 	
-	public static List<CrossBitmap> chooseAndLoadImages()
+	public static List<ImageFile> chooseAndLoadImages()
 	{
 		File[] files = openImagePicker();
 		
 		return loadImagesFromFiles(files);
 	}
 	
-	public static List<CrossBitmap> chooseAndLoadDir()
+	public static List<ImageFile> chooseAndLoadDir()
 	{
 		String dir = openDirPicker();
 		
@@ -334,7 +339,7 @@ public class CrossRes
 											for (int i = 0; i<fileToLoad.length; i++)
 												fileToLoad[i] = toLoad.get(i);
 
-											List<CrossBitmap> imgs = loadImagesFromFiles(fileToLoad);
+											List<ImageFile> imgs = loadImagesFromFiles(fileToLoad);
 											Main.main.mainCrtl.currentCtrl.onGUIAction(new GUIAction("", GUIAction.DROP_FILE, imgs));
 										}
 										
@@ -423,6 +428,39 @@ public class CrossRes
 			}
 		
 		return templates;
+	}
+
+	
+	public static List<String> getGraphs(boolean fullName)
+	{
+		List<String> files = getFileList(fullName);
+		List<String> templates = new ArrayList<>();
+		
+		for (String file : files)
+			if (getFileExt(file).equals("gdgraph"))
+			{
+				if (fullName)
+					templates.add(file);
+				else
+					templates.add(file.substring(0,file.lastIndexOf('.')));
+			}
+		
+		return templates;
+	}
+	
+	public static String getTime()
+	{
+		DateFormat dateFormat = new SimpleDateFormat("HH_mm_ss");
+		Date date = new Date();
+		return dateFormat.format(date);
+	}
+		
+	public static String getDate()
+	{
+		DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy");
+		Date date = new Date();
+		return dateFormat.format(date);
+		
 	}
 	
 	

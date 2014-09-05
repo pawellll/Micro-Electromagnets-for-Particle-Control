@@ -1,5 +1,6 @@
 package Digit;
 
+import GD.Opts;
 import Platform.CrossBitmap;
 import Platform.Main;
 import Supp.Colors;
@@ -16,6 +17,63 @@ import ocr.OCRPlugin;
  */
 public class Digitalize
 {
+	
+	public static List<Integer> detectColors(DigitInput in)
+	{
+		return detectColorsWithThr(in, 3, 10);
+	}
+		
+	public static List<Integer> detectColorsWithThr(DigitInput in, double thr1, double thr2)
+	{
+		List<ColorsUtils.Color> colors;
+		
+		Integer[][][] image;
+
+		if (in.options[Opts.oColorsDetectOn.id].is(Opts.oColorsDetectOn.LEGEND) &&
+				in.legend != null)
+			image = ImageUtils.bitmapToArray(in.legend);	
+		else
+			image = ImageUtils.bitmapToArray(in.graph);	
+		
+		List<Integer> set = ColorsUtils.getColorSet(image, true);
+		
+		List<Integer> cols = new ArrayList<>();
+		for (Integer x : set)
+		{
+			if (CIELab.delta(in.background, x) > 10)
+				cols.add(x);				
+		}
+		
+		colors = ColorsUtils.detectColors(cols, thr1);
+		
+		cols.clear();
+		for (ColorsUtils.Color c : colors)
+		{
+			cols.add(c.mean);
+		}
+		colors = ColorsUtils.detectColorsBetter(cols, thr2);
+		
+		List<Integer> result = new ArrayList<>();
+		for (ColorsUtils.Color colRes : colors)
+			result.add(colRes.mean);
+		
+		return result;
+	}
+		
+	
+	public static List<CrossBitmap> autoDetectElements(DigitInput in)
+	{
+		return null;
+	}
+			
+	
+	
+	
+	public static DigitOutput digitalize(DigitInput in)
+	{
+		return new DigitOutput();
+	}
+	
 	
 	public static List<Point>[] digiNormalColors(CrossBitmap graph, int[] colors)
 	{

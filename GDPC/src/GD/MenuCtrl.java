@@ -14,6 +14,7 @@ import Supp.Colors;
 import Supp.Comm;
 import Supp.Dim;
 import Supp.DrawingInterface;
+import Supp.ImageFile;
 import Supp.Skin;
 import Supp.Str;
 import java.util.List;
@@ -31,6 +32,7 @@ public class MenuCtrl extends Controller
 	
 	private GUIImage ram = null;
 	private GUIProgress loadProgress = null;
+	private GUIList list = null;
 	
 	@Override
 	public void onSetCurrent()
@@ -69,7 +71,7 @@ public class MenuCtrl extends Controller
 		GUILabel lab = new GUILabel(10, 65, 30, 9, Str.MENU_TEMPLATE, 120, 25);
 		gui.addComponent(lab);
 		
-		GUIList list = new GUIList(ID_LIST_TEMP, 40, 67, 50, 5);
+		list = new GUIList(ID_LIST_TEMP, 40, 67, 50, 5);
 		list.addOption(Str.get(Str.OPT_DEFAULT), Opts.optionsToString(Opts.createDefaultSet()));
 		List<String> temps = CrossRes.getTemplates(false);
 		List<String> tempsFull = CrossRes.getTemplates(true);
@@ -131,21 +133,21 @@ public class MenuCtrl extends Controller
 	@Override
 	public void onGUIAction(GUIAction e)
 	{
-		List<CrossBitmap> imgs;
+		List<ImageFile> imgs;
 		
 		switch (e.id)
 		{
 			case ID_BUT_LOAD_IMG_PC:
 				imgs =  CrossRes.chooseAndLoadImages();
-//				if (imgs != null)		
-//					System.out.println(imgs);
-				loadProgress.visible = false;					
+				loadProgress.visible = false;		
+				if (imgs != null)		
+					Main.main.mainCrtl.chageController(new DigitCtrl(ImageFile.toArrray(imgs), list.getAdditional()));
 			break;
 				
 			case ID_BUT_LOAD_DIR:					
 				imgs =  CrossRes.chooseAndLoadDir();
-//				if (imgs != null)		
-//					System.out.println(imgs);
+				if (imgs != null)		
+					Main.main.mainCrtl.chageController(new DigitCtrl(ImageFile.toArrray(imgs), list.getAdditional()));
 				loadProgress.visible = false;				
 			break;
 				
@@ -153,9 +155,9 @@ public class MenuCtrl extends Controller
 		
 		if (e.action == GUIAction.DROP_FILE)
 		{
-			imgs =  (List<CrossBitmap>)e.data;
+			imgs =  (List<ImageFile>)e.data;
 			if (imgs != null)		
-				System.out.println(imgs);
+				Main.main.mainCrtl.chageController(new DigitCtrl(ImageFile.toArrray(imgs), list.getAdditional()));
 		}
 		
 	}

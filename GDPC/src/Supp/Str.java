@@ -76,6 +76,14 @@ public class Str
   public static final String[] DIGIT_CUT_GRAPH    = {"Proszę zaznaczyć obszar z wykresem", "Please select regions with graph"};
   public static final String[] DIGIT_COLORS_CUT   = {"Proszę wybrać kolory do usunięcia z obrazka", "Please pick colors to remove"};
   public static final String[] DIGIT_PICK_COLORS  = {"Proszę wybrać kolory podwykresów", "Please select subgraphs' colors"};
+  public static final String[] DIGIT_THRESHOLD    = {"Progi:", "Thresholds:"};
+	
+	//DrawGraphCtrl
+  public static final String[] DRAW_TITLE       = {"Rysowanie wykresów", "Drawing graphs"};
+  public static final String[] DRAW_LIST_TITLE  = {"Wybierz wykresy do wczytania", "Choose graphs to load"};
+  public static final String[] DRAW_LOAD        = {"Wczytaj wykres", "Load graph"};
+  public static final String[] DRAW_DRAW        = {"Rysuj wykresy", "Draw graphs"};
+  public static final String[] DRAW_NO_GRAPHS   = {"Prosze wcześniej wczytać jakieś wykresy", "Please load some graphs first"};
 
 	
 	//GUIList

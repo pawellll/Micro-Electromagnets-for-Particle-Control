@@ -1,6 +1,7 @@
 package GUI;
 
 import GD.AboutCtrl;
+import GD.DrawGraphCtrl;
 import GD.MenuCtrl;
 import GD.OptionsCtrl;
 import Platform.CrossRes;
@@ -293,7 +294,7 @@ public class GUIMain
 					switch (iconOver)
 					{
 						case 0:	Main.main.mainCrtl.chageController(new MenuCtrl());	break;
-						case 1:	setIconsEnabled(false);				break;
+						case 1:	Main.main.mainCrtl.chageController(new DrawGraphCtrl());			break;
 						case 2:	Main.main.mainCrtl.chageController(new OptionsCtrl());	break;
 						case 3: Main.main.mainCrtl.chageController(new AboutCtrl());	break;
 						case 4:	Main.main.Terminate(); break;

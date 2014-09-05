@@ -4,6 +4,9 @@ import GD.Opts;
 import Platform.CrossBitmap;
 import java.util.List;
 
+/**
+ * Klasa przechowujaca dane potrzebne do digitalizacji. 
+ */
 public class DigitInput
 {
 	public Opts.Option[] options = null; //Szablon opcji

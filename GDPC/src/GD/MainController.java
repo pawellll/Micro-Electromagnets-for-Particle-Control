@@ -3,6 +3,7 @@ package GD;
 import Platform.CrossBitmap;
 import Platform.CrossRes;
 import Platform.Main;
+import Supp.ImageFile;
 
 /**
  * Klasa, ktora jest glownym kontrolerem, obsluguje przekazywanie kontroli
@@ -17,12 +18,13 @@ public class MainController
 	
 	public void start()
 	{
-		CrossBitmap[] abc = new CrossBitmap[1];
-		abc[0] = CrossRes.loadImg("F:\\\\Studia\\\\9 biometria wakacje\\\\2 Java\\\\GDPC\\\\wyk2.bmp");
-
-		String s = "0:0;0:0;0:0;0:0;0:2;0:0;0:0;2:0;0:0;0:0;0:0;1:0;1:0;1:0;1:0;1:0;1:0;0:0;0:0;1:0";
+		ImageFile[] abc = new ImageFile[1];
+		abc[0] = new ImageFile(CrossRes.loadImg("F:\\\\Studia\\\\9 biometria wakacje\\\\2 Java\\\\GDPC\\\\wykres.png"),
+											"looool");
 		
-		currentCtrl = new DigitCtrl(abc, s);
+		String s = "0:0;0:0;0:0;0:0;0:0;0:0;0:0;0:0;1:0;0:0;0:0;0:0;0:0;0:0;0:0;0:0;0:0;0:0;0:0;0:0";
+		
+		currentCtrl = new MenuCtrl(); //new DigitCtrl(abc, s);
 		
 		currentCtrl.setCurrent(Main.main.GUI);
 	}

@@ -3,6 +3,8 @@ package GD;
 import Digit.CIELab;
 import Digit.ColorsUtils;
 import Digit.DigitInput;
+import Digit.DigitOutput;
+import Digit.Digitalize;
 import Digit.FrameDetecting;
 import GUI.GUIAction;
 import GUI.GUIButton;
@@ -12,6 +14,7 @@ import GUI.GUIList;
 import GUI.GUIMain;
 import GUI.GUIProgress;
 import Platform.CrossBitmap;
+import Platform.CrossRes;
 import static Platform.CrossRes.GUI;
 import Platform.Main;
 import Supp.Colors;
@@ -20,6 +23,7 @@ import Supp.Dim;
 import Supp.DoubleArea;
 import Supp.DoublePoint;
 import Supp.DrawingInterface;
+import Supp.ImageFile;
 import Supp.Skin;
 import Supp.Str;
 import java.util.ArrayList;
@@ -46,6 +50,9 @@ public class DigitCtrl extends Controller
 	private static final int STATE_CUT_GRAPH       = 10;	
 	private static final int STATE_EDIT_COLORS_CUT = 11;	
 	private static final int STATE_PICK_COLORS     = 12;	
+	private static final int STATE_DETECT_COLORS   = 13;	
+	private static final int STATE_PICK_ELEMENTS   = 14;		
+	private static final int STATE_FINALIZE        = 15;		
 
 //STALE ID KOMPONENTOW
 	private static final String ID_IMG_VIEW = "ID_IMG_VIEW";	
@@ -58,9 +65,12 @@ public class DigitCtrl extends Controller
 	private GUILabel    titleLabel = null, 
 									    subTitleLabel = null, 
 									    listTitle = null,
-									    statusLabels = null;
+									    statusLabels = null,
+									    thrLabel = null;
 	private GUIImage    img = null;
-	private GUIList     list = null;
+	private GUIList     list = null,
+											thr1 = null,
+											thr2 = null;
 	private GUIButton   prevBut = null,
 									    nextBut = null;
 	private GUIProgress progressMain = null,
@@ -75,13 +85,14 @@ public class DigitCtrl extends Controller
 	private final List<Integer> askAlwaysOpts = new ArrayList<>();
 	
 	private Opts.Option[] options;	
-	private CrossBitmap imgs[] = null;
+	private ImageFile imgs[] = null;
 	
 	private DigitInput digitInput;
+	private List<DigitOutput> digitOutput = new ArrayList<>();
 	private int state = STATE_INIT;
 	
 //KONSTRUKTOR
-	public DigitCtrl(CrossBitmap images[], String template)
+	public DigitCtrl(ImageFile images[], String template)
 	{
 		imgs = images;
 		options = Opts.stringToOptions(template);
@@ -148,6 +159,7 @@ public class DigitCtrl extends Controller
 	public void onLostControl()
 	{
 		executeOnLost = false;
+		gui.setIconsEnabled(true);
 		Main.main.mainCrtl.chageController(new MenuCtrl());
 	}	
 	
@@ -159,6 +171,17 @@ public class DigitCtrl extends Controller
 			g.gSetColor(Skin.LINE);
 			g.gDrawLine(Dim.X(6), Dim.Y(53), Dim.X(6) + Dim.W(88), Dim.Y(53));
 		}
+		else
+		if ((state == STATE_PICK_COLORS || state == STATE_DETECT_COLORS) && digitInput.colors != null)
+		{
+			int i = 0;
+			for (Integer col : digitInput.colors)
+			{
+				i += 4;
+				g.gSetColor(col);
+				g.gFillRectangle(Dim.X(5+i), img.getY()+Dim.H(img.h+3), Dim.W(3), Dim.H(5));
+			}
+		}
 	}
 
 	@Override
@@ -166,8 +189,16 @@ public class DigitCtrl extends Controller
 	{
 		if (e.action == GUIAction.LIST_CHANGE)
 		{
-			options[Integer.valueOf(e.id)].set((Integer)e.data);
-			options = Opts.updateEnabledOptions(options);
+			if (state == STATE_DETECT_COLORS)
+			{
+				if (e.id.equals("thr1") || e.id.equals("thr2"))
+					digitInput.colors = Digitalize.detectColorsWithThr(digitInput, thr1.getSelectedIndex()/2.0, thr2.getSelectedIndex()/2.0);
+			}
+			else
+			{
+				options[Integer.valueOf(e.id)].set((Integer)e.data);
+				options = Opts.updateEnabledOptions(options);
+			}
 		}
 		else
 		if (e.action == GUIAction.IMG_SELECTED)
@@ -259,6 +290,7 @@ public class DigitCtrl extends Controller
 			if (currrentColorPicker == 1)
 			{
 				int col = img.getImage().getRGB(posX, posY);
+				currrentColorPicker = 0;
 				
 				if (state == STATE_EDIT_COLORS_CUT)
 				{
@@ -267,15 +299,19 @@ public class DigitCtrl extends Controller
 							for (int by = 0; by < digitInput.graph.getHeight(); by++)
 								if (CIELab.delta(digitInput.graph.getRGB(bx, by), col) < 4)
 									digitInput.graph.setRGB(bx, by, digitInput.background);
-					
-					img.setImage(digitInput.graph);
-					currrentColorPicker = 0;
 				}
-			}				
-			
-			
-		}			
-		
+				else
+				if (state == STATE_PICK_COLORS)
+				{
+					if (digitInput.colors != null)
+						if (digitInput.colors.indexOf(col) < 0 && digitInput.background != col)
+							digitInput.colors.add(col);
+				}
+				
+				img.setImage(digitInput.graph);						
+			}							
+		}		
+
 		switch (e.id)
 		{
 			case ID_BUT_PREV:
@@ -287,7 +323,8 @@ public class DigitCtrl extends Controller
 					completeOptionsUpdate(1);
 				else
 				if (state == STATE_EDIT_TRASH || state == STATE_EDIT_COLORS_CUT || 
-						state == STATE_PICK_COLORS)
+						state == STATE_PICK_COLORS || state == STATE_DETECT_COLORS ||
+						state == STATE_PICK_ELEMENTS)
 				{
 					moveState();
 				}
@@ -333,6 +370,8 @@ public class DigitCtrl extends Controller
 				img.setImage(digitInput.img);
 				img.setSelectable();
 				nextBut.visible = true;
+				
+				digitInput.options = options;
 				
 				if (options[Opts.oRemoveTrash.id].is(Opts.oRemoveTrash.YES))
 					gui.setInfoLongest(Str.get(Str.DIGIT_REMOVE_TRASH), GUIMain.INFO_INFO);
@@ -405,8 +444,8 @@ public class DigitCtrl extends Controller
 				else
 				{
 					FrameDetecting fd = new FrameDetecting();
-					DoubleArea res = fd.process(digitInput.img);
-					digitInput.graph = digitInput.img.getSubImage((int)(res.startX), (int)(res.startY), (int)(Math.max(res.endX,1)), (int)(Math.max(res.endY,1)));
+					DoubleArea res = fd.process(digitInput.img.clone());
+					digitInput.graph = digitInput.img.getSubImage((int)(Math.max(res.startX+5,1)), (int)(Math.max(res.startY+5,1)), (int)(Math.max(res.endX-5,1)), (int)(Math.max(res.endY-5,1)));
 
 					moveState();		
 				}
@@ -428,9 +467,123 @@ public class DigitCtrl extends Controller
 			break;
 				
 			case STATE_EDIT_COLORS_CUT:
+				state = STATE_PICK_COLORS;
+
+				currrentColorPicker = 0;
+				img.setClickable(true);				
+				digitInput.colors = new ArrayList<>();
+				
+				if (options[Opts.oColorsDetectOn.id].is(Opts.oColorsDetectOn.MANUAL) &&
+						(!options[Opts.oSubgraphsColors.id].is(Opts.oSubgraphsColors.MONO)) )
+					gui.setInfoLongest(Str.get(Str.DIGIT_PICK_COLORS), GUIMain.INFO_INFO);
+				else
+					moveState();				
 			break;
 				
-			case STATE_PICK_COLORS: 				
+			case STATE_PICK_COLORS: 	
+				state = STATE_DETECT_COLORS;
+				
+				img.setClickable(false);
+				currrentColorPicker = -1;				
+				
+				if ((!options[Opts.oColorsDetectOn.id].is(Opts.oColorsDetectOn.MANUAL)) &&
+						(!options[Opts.oSubgraphsColors.id].is(Opts.oSubgraphsColors.MONO)) )
+				{
+					if (options[Opts.oColorsThreshold.id].is(Opts.oColorsThreshold.FIXED))
+					{
+						digitInput.colors = Digitalize.detectColors(digitInput);
+						moveState();
+					}
+					else
+					{
+						img.y = img.y + 8;
+						img.h = img.h - 8;
+			
+						thrLabel = new GUILabel(10, 12, 10, 6, Str.DIGIT_THRESHOLD, 125, 25);
+						
+						thr1 = new GUIList("thr1", 25, 12, 25, 6);
+						thr2 = new GUIList("thr2", 60, 12, 25, 6);
+						
+						for (int i=1; i<40; i++)
+						{
+							thr1.addOption((0.5*i)+"");
+							thr2.addOption((0.5*i)+"");
+						}
+						thr1.setSelectedIndex(5);
+						thr2.setSelectedIndex(19);
+						
+						gui.addComponent(thrLabel);
+						gui.addComponent(thr1);
+						gui.addComponent(thr2);
+					}
+				}
+				else
+					moveState();					
+				
+			break;
+				
+			case STATE_DETECT_COLORS: 	
+				if (thr1 != null)
+					thr1.visible = false;
+				
+				if (thr2 != null)
+				thr2.visible = false;
+				
+				if (thrLabel != null)
+				thrLabel.visible = false;
+				
+				img.y = img.y - 8;
+				img.h = img.h + 8;
+				
+				if (options[Opts.oGraphType.id].is(Opts.oGraphType.POINT))
+				{
+					if (options[Opts.oDetectElements.id].is(Opts.oDetectElements.DONT))
+						state = STATE_FINALIZE;
+					else
+					{
+						if (!(options[Opts.oDetectElements.id].is(Opts.oDetectElements.MANUAL)))								
+							digitInput.elements = Digitalize.autoDetectElements(digitInput);
+						else
+						{
+							state = STATE_PICK_ELEMENTS;
+							img.setSelectable();
+						}
+					}
+				}
+				else
+					state = STATE_FINALIZE;
+					
+				moveState();
+				
+			break;
+					
+			case STATE_PICK_ELEMENTS: 	
+				state = STATE_FINALIZE;
+				moveState();				
+			break;
+					
+			case STATE_FINALIZE: 	
+				DigitOutput out = Digitalize.digitalize(digitInput);
+				
+				if (options[Opts.oSaveResToFile.id].is(Opts.oSaveResToFile.SAVE))
+				{
+					String fileName = digitInput.name.substring(0,  digitInput.name.length()-CrossRes.getFileExt(digitInput.name).length()-1);
+					if (options[Opts.oSaveFileName.id].is(Opts.oSaveFileName.DATE))
+						fileName += "_" + CrossRes.getDate();
+					
+					if (options[Opts.oSaveFileName.id].is(Opts.oSaveFileName.DATE_TIME))
+						fileName += "_" + CrossRes.getTime();
+					
+					List<String> graphs = CrossRes.getGraphs(false);
+					if ((options[Opts.oSaveFileExists.id].is(Opts.oSaveFileExists.ADD_DATATIME)) &&
+							graphs.indexOf(fileName)>-1)
+						fileName += fileName + CrossRes.getTime()+"_"+CrossRes.getDate();
+					
+					CrossRes.saveText(CrossRes.getHomeDir()+fileName+".gdgraph", out.toString());
+				}					
+				
+				digitOutput.add(out);
+				nextImg();
 			break;
 				
 		}
@@ -439,17 +592,22 @@ public class DigitCtrl extends Controller
 	private void nextImg()
 	{
 		currentImg++;
-		
 		if (currentImg >= imgs.length)
 		{
-			
+			gui.setIconsEnabled(true);
+			gui.iconSelected = 1;
+			if (options[Opts.oAfterEnd.id].is(Opts.oAfterEnd.GO_TO_MENU))
+				Main.main.mainCrtl.chageController(new MenuCtrl());
+			else
+				Main.main.mainCrtl.chageController(new DrawGraphCtrl(digitOutput));
 		}
 		else
 		{
 			showTemplateComponents(true);
-			digitInput = new DigitInput(imgs[currentImg]);
-			digitInput.background = ColorsUtils.detectBackground(imgs[currentImg], 8);
-			img.setImage(imgs[currentImg], Comm.STRETCH_V_PROP);			
+			digitInput = new DigitInput(imgs[currentImg].img);
+			digitInput.name = imgs[currentImg].name;
+			digitInput.background = ColorsUtils.detectBackground(imgs[currentImg].img, 8);
+			img.setImage(imgs[currentImg].img, Comm.STRETCH_V_PROP);			
 			currentOptionsIndex=-1;
 			completeOptionsUpdate(1);
 		}

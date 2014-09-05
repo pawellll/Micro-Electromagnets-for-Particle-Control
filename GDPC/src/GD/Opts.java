@@ -124,13 +124,13 @@ public class Opts
 	{
 		public static final int id = 2;
 		
-		public static final int ADD_NUMBER = 0;
-		public static final int OVERWRITE = 1;
+		public static final int ADD_DATATIME = 0;
+		public static final int OVERWRITE    = 1;
 			
 		public oSaveFileExists()
 		{
 			setName("Jeśli taki plik już istnieje", "If such file exists");
-			addOpt("dodaj kolejny numer", "add successive number");
+			addOpt("dodaj bieżącą datę+czas", "add current date+time");
 			addOpt("nadpisz", "overwrite");
 			addAsk();
 		}		
@@ -254,16 +254,18 @@ public class Opts
 	{
 		public static final int id = 9;
 		
-		public static final int MANUAL = 0;		
-		public static final int GRAPH  = 1;
-		public static final int LEGEND = 2;		
+		public static final int DONT   = 0;		
+		public static final int MANUAL = 1;		
+		public static final int GRAPH  = 2;
+		public static final int LEGEND = 3;		
 		
 		public oDetectElements()
 		{
-			setName("Wykrywaj kształty punktów na podstawie", "Detect points shapes basing on");
+			setName("Wykrywaj kształty punktów", "Detect points shapes");
+			addOpt("nie wykrywaj gdy są kolory", "don't detect when there are colors");
 			addOpt("ręcznie", "manually");
-			addOpt("wykresu", "graph");
-			addOpt("legendy", "legend");			
+			addOpt("z wykresu", "from graph");
+			addOpt("z legendy", "from legend");			
 			addAsk();
 		}		
 		
