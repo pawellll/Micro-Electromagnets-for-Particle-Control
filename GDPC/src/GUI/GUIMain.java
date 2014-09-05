@@ -241,9 +241,10 @@ public class GUIMain
 	{
 		for (GUIComponent componet: components)
 		{
-			if (x>=componet.getX() && x<=componet.getX()+Dim.W(componet.w) &&
-				  y>=componet.getY() && y<=componet.getY()+Dim.H(componet.h))
-				return componet;
+			if (componet.visible)
+				if (x>=componet.getX() && x<=componet.getX()+Dim.W(componet.w) &&
+						y>=componet.getY() && y<=componet.getY()+Dim.H(componet.h))
+					return componet;
 		}
 		return null;
 	}

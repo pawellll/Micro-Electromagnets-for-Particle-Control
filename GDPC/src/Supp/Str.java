@@ -59,12 +59,31 @@ public class Str
   public static final String[] ABOUT_APP1 = {"Program do digitalizacji wykresów zwykłych i punktowych.", "Application created for regular and scatter plot digitization."};
   public static final String[] ABOUT_APP2 = {"AGH 2014.", "AGH 2014."};
   public static final String[] ABOUT_US = {"Autorzy: M. Janusz, P. Pęksa, D. Zieliński", "Authors: Autorzy: M. Janusz, P. Pęksa, D. Zieliński"};
+	
+	
+	//DigitCtrl
+  public static final String[] DIGIT_TITLE        = {"Digitalizacja w toku", "Digitalization in progress"};
+  public static final String[] DIGIT_TEMP         = {"Uzupełnianie szablonu opcji", "Complementing options template"};
+  public static final String[] DIGIT_TEMP_ONCE    = {"Proszę uzupełnić opcje gdzie zaznaczono 'zapytaj raz'.", "Please complete options where 'ask once' was chosen."};
+  public static final String[] DIGIT_TEMP_ALWYAS  = {"Proszę uzupełnić opcje gdzie zaznaczono 'zapytaj zawsze', dla wykresu powyżej.", "Please complete options where 'ask always' was chosen, for the graph above."};
+  public static final String[] DIGIT_REMOVE_TRASH = {"Proszę zaznaczyć obszary do usunięcia", "Please select regions to remove"};
+  public static final String[] DIGIT_CUT_TITLE    = {"Proszę zaznaczyć tytuł wykresu", "Please select graph's title"};
+  public static final String[] DIGIT_CUT_TITLE_X  = {"Proszę zaznaczyć podpis osi X", "Please select X asis's caption"};
+  public static final String[] DIGIT_CUT_TITLE_Y  = {"Proszę zaznaczyć podpis osi Y", "Please select Y asis's caption"};
+  public static final String[] DIGIT_CUT_VALUE_X  = {"Proszę zaznaczyć wartości osi X", "Please select X asis's values"};
+  public static final String[] DIGIT_CUT_VALUE_Y  = {"Proszę zaznaczyć wartości osi Y", "Please select Y asis's values"};
+  public static final String[] DIGIT_CUT_LEGEND   = {"Proszę zaznaczyć legendę", "Please select legend"};
+  public static final String[] DIGIT_CUT_GRAPH    = {"Proszę zaznaczyć obszar z wykresem", "Please select regions with graph"};
+  public static final String[] DIGIT_COLORS_CUT   = {"Proszę wybrać kolory do usunięcia z obrazka", "Please pick colors to remove"};
+  public static final String[] DIGIT_PICK_COLORS  = {"Proszę wybrać kolory podwykresów", "Please select subgraphs' colors"};
 
+	
 	//GUIList
   public static final String[] LIST_CHOOSE = {"Wybierz opcje", "Choose option"};
 		
 	//Opts
 	public static final String[] OPTS_STRING_ERROR = {"Nieprawidłowy format szablonu opcji", "Option template is not valid"};
+	public static final String[] OPTS_IRRELEVANT   = {"niezwiązany", "irrelevant"};
 	
 	//CrossRes
   public static final String[] RES_LOAD_STR_ERROR = {"Błąd przy wczytywaniu pliku", "Error while loading file"};

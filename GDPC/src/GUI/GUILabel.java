@@ -20,7 +20,6 @@ public class GUILabel extends GUIComponent
 	public double font = 3;
 	public int textAlign = Comm.ALIGN_VCENTER | Comm.ALIGN_LEFT;
 		
-	public boolean visible = true;
 	public boolean enabled = true;
 	
 	public GUILabel(double x, double y, double width, double height, String text[], int minWidth, int minHeight)

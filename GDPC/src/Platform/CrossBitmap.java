@@ -1,6 +1,8 @@
 package Platform;
 
 import Supp.Colors;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 /**
@@ -17,6 +19,11 @@ public class CrossBitmap {
 		public static BufferedImage newFrom(CrossBitmap image)
 		{
       return new BufferedImage(image.getWidth(), image.getHeight(), image.img.getType());
+    }	
+	
+		public static BufferedImage newBlank(int w, int h)
+		{
+      return new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
     }	
 			
     public CrossBitmap(BufferedImage image) {
@@ -94,5 +101,32 @@ public class CrossBitmap {
 			
 			return new CrossBitmap(out);
 		}		
+		
+		public CrossBitmap scale(int width, int height, boolean smooth)
+		{	
+			BufferedImage rescaled = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+			Graphics2D g2d = (Graphics2D)rescaled.createGraphics();
+
+			Object type;
+			if (smooth)
+				type = RenderingHints.VALUE_RENDER_QUALITY;
+			else
+				type = RenderingHints.VALUE_RENDER_SPEED;
+
+			g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING,type));
+			g2d.drawImage(img, 0, 0, width, height, null);
+
+			return new CrossBitmap(rescaled);
+		}
+
+		public CrossBitmap scale(double ratio, boolean smooth)
+		{	
+			return scale((int)(img.getWidth()*ratio), (int)(img.getHeight()*ratio), smooth);
+		}	
+	
+		
+		
+		
+		
 		
 }   

@@ -35,12 +35,17 @@ public class GUIButton extends GUIComponent
 	@Override
 	public void onMouseUp(double x, double y)
 	{
+		if (!visible)
+			return;		
 		Main.main.mainCrtl.currentCtrl.onGUIAction(new GUIAction(id, GUIAction.BUTTON_CLICK, null));
 	}
 
 	@Override
 	public void onMouseExit()
 	{
+		if (!visible)
+			return;	
+		
 		changeCursor(Comm.CURSOR_DEF);
 		active = false;
 		paintGUI();
@@ -49,6 +54,9 @@ public class GUIButton extends GUIComponent
 	@Override
 	public void onMouseEnter()
 	{
+		if (!visible)
+			return;
+		
 		changeCursor(Comm.CURSOR_HAND);		 
 		active = true;
 		paintGUI();
@@ -57,6 +65,9 @@ public class GUIButton extends GUIComponent
 	@Override
 	public void onPaint(DrawingInterface g, int width, int height)
 	{
+		if (!visible)
+			return;
+		
 		if (active)
 			g.gSetColor(Skin.BCG_L);
 		else

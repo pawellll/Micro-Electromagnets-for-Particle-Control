@@ -1,8 +1,7 @@
-package processing;
+package Digit;
 
 import Platform.CrossBitmap;
 import Supp.DoubleArea;
-
 
 /**
  *  ||||||||||| Returns left upper corner, width and height in DoubleArea class

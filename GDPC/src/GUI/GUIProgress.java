@@ -17,7 +17,6 @@ public class GUIProgress extends GUIComponent
 	public double max = 100;
 	public double value = 0;
 	
-	public boolean visible = true;
 	
 	public GUIProgress( double x, double y, double width, double height)
 	{

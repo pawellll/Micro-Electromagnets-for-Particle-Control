@@ -21,6 +21,7 @@ public class GUIComponent
 	public double w, h;
 	public double contWidth, contHeight; 
 	public boolean focusable = false;
+	public boolean visible = true;
 	
 	public GUIComponent(String id, double x, double y, double width, double height)
 	{

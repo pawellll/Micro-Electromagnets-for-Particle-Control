@@ -8,6 +8,7 @@ import Supp.Dim;
 import Supp.DoubleArea;
 import Supp.DoublePoint;
 import Supp.DrawingInterface;
+import Supp.Skin;
 import java.awt.Color;
 
 /**
@@ -74,11 +75,25 @@ public class GUIImage extends GUIComponent
 		img = image;
 		setStretchFlag(stretchFlag);
 	}
+		
+	public CrossBitmap getImage()
+	{
+		return img;
+	}
 	
 	public void setSelectable()
 	{
     focusable = true;
 		selectable = true;
+		selectStarted = false;
+		endX = 0;
+		endY = 0;
+	}
+	
+	public void setNonSelectable()
+	{
+    focusable = true;
+		selectable = false;
 		selectStarted = false;
 		endX = 0;
 		endY = 0;
@@ -102,7 +117,7 @@ public class GUIImage extends GUIComponent
 	
 		if (selectable && selectStarted && endX!=0 && endY!=0)
 		{
-			g.gSetColor(Colors.GREEN, 128);
+			g.gSetColor(Skin.BUTTON_ON, 128);
 			g.gFillRectangle((int)Math.min(startX, endX), (int)Math.min(startY, endY), (int)Math.abs(endX-startX), (int)(Math.abs(endY-startY)));
 			
       g.gSetColor(Colors.BLACK);
@@ -111,19 +126,12 @@ public class GUIImage extends GUIComponent
     else
     if (selectable && tempX!=0 && tempY!=0)
     {	
-			g.gSetColor(Colors.GREEN, 128);
+			g.gSetColor(Skin.BUTTON_ON, 128);
 			g.gDrawLine(getX(), (int)tempY, getX()+Dim.W(w, minX), (int)tempY);
 			g.gDrawLine((int)tempX, getY(), (int)tempX, getY()+Dim.H(h, minY));
     }
 	}
 		
-	@Override
-	public void onMouseClick(double x, double y)
-	{
-		if (img == null)
-			return;
-		Main.main.mainCrtl.currentCtrl.onGUIAction(new GUIAction(id, GUIAction.IMG_CLICK, new DoublePoint(x,y)));	
-	}
 	
 	@Override
 	public void onMouseDown(double x, double y)
@@ -137,7 +145,9 @@ public class GUIImage extends GUIComponent
 			startY = y;
 						
 			selectStarted = true;
-		}
+		}		
+
+		Main.main.mainCrtl.currentCtrl.onGUIAction(new GUIAction(id, GUIAction.IMG_CLICK, new DoublePoint(x,y)));		
 	}
 		
 	@Override
@@ -174,6 +184,8 @@ public class GUIImage extends GUIComponent
 		  selectStarted = false;
 			endX = 0;
 			endY = 0;
+			tempX = x;
+			tempY = y;
 			Main.main.canvas.paint();
 		}
 	}

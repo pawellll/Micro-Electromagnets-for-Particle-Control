@@ -25,7 +25,6 @@ public class GUIList extends GUIComponent
 	private boolean showProgress = false;
 	
 	public int maxCharacters = 0;
-	public boolean visible = true;
 	public boolean enabled = true;
 	
 	public GUIList(String id, double x, double y, double width, double height)

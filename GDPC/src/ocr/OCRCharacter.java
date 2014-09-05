@@ -5,7 +5,7 @@
  */
 package ocr;
 
-import GD.Digitalize;
+import Digit.Digitalize;
 import Platform.CrossBitmap;
 import Supp.Colors;
 import java.awt.image.BufferedImage;

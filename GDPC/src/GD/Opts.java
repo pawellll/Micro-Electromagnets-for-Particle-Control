@@ -41,6 +41,19 @@ public class Opts
 			name[0] = pl+":";
 			name[1] = en+":";
 		}
+			
+		public String[] getName()
+		{
+			if (!enabled)
+			{
+				String[] temp = new String[2];
+				temp[0] = name[0] + " (" + Str.OPTS_IRRELEVANT[0] + ")";
+				temp[1] = name[1] + " (" + Str.OPTS_IRRELEVANT[1] + ")";
+				return temp;
+			}
+			else
+				return name;
+		}
 		
 		public void addOpt(String pl, String en)
 		{
@@ -73,8 +86,8 @@ public class Opts
 	{
 		public static final int id = 0;
 		
-		public static final int LINE = 0;
-		public static final int POINT = 1;
+		public static final int SAVE = 0;
+		public static final int DONT_SAVE = 1;
 			
 		public oSaveResToFile()
 		{
@@ -91,8 +104,9 @@ public class Opts
 	{
 		public static final int id = 1;
 		
-		public static final int LINE = 0;
-		public static final int POINT = 1;
+		public static final int INPUT_NAME = 0;
+		public static final int DATE = 1;
+		public static final int DATE_TIME = 2;
 			
 		public oSaveFileName()
 		{
@@ -110,8 +124,8 @@ public class Opts
 	{
 		public static final int id = 2;
 		
-		public static final int LINE = 0;
-		public static final int POINT = 1;
+		public static final int ADD_NUMBER = 0;
+		public static final int OVERWRITE = 1;
 			
 		public oSaveFileExists()
 		{
@@ -128,15 +142,15 @@ public class Opts
 	{
 		public static final int id = 3;
 		
-		public static final int LINE = 0;
-		public static final int POINT = 1;
+		public static final int SHOW_GRAPH = 0;
+		public static final int GO_TO_MENU = 1;
 			
 		public oAfterEnd()
 		{
 			setName("Po zakończeniu digitalizacji", "After Digitization is done");
 			addOpt("przedstaw wykres", "show a graph");
 			addOpt("wróć do menu", "go back to menu");
-			addAsk();
+//			addAsk();
 		}		
 
 		@Override	public int ID()	{ return id; }
@@ -159,39 +173,39 @@ public class Opts
 
 		@Override	public int ID()	{ return id; }
 	}
-	
-	public static class oSubgraphsAmount extends Option
-	{
-		public static final int id = 5;
-		
-		public static final int ONE = 0;
-		public static final int MANY = 1;
-		
-		public oSubgraphsAmount()
-		{
-			setName("Liczba podwykresów", "Subgraph amount");
-			addOpt("jeden", "one");
-			addOpt("wiele", "many");
-			addAsk();
-		}		
-	
-		@Override	public int ID()	{ return id; }
-	}
 		
 	public static class oSubgraphsColors extends Option
 	{
-		public static final int id = 6;
+		public static final int id = 5;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int DETECT = 0;
+		public static final int MONO   = 1;
+		public static final int COLOR  = 2;
 		
 		public oSubgraphsColors()
 		{
 			setName("Kolory podwykresów", "Subgraphs colors");
+			addOpt("wykryj kolory", "detect colors");			
 			addOpt("monochromatyczny", "monochrome");
 			addOpt("kolorowy", "color");
-			addOpt("wykryj kolory", "detect colors");
+			addAsk();
+		}		
+		
+		@Override	public int ID()	{ return id; }		
+	}		
+		
+	public static class oMonoSegmentation extends Option
+	{
+		public static final int id = 6;
+		
+		public static final int YES = 0;
+		public static final int NO  = 1;
+		
+		public oMonoSegmentation()
+		{
+			setName("Separuj monochromatyczne podwykresy przez grupowanie pikseli", "Separate monochromatic subgraphs by grouping pixels");
+			addOpt("włącz", "on");
+			addOpt("wyłącz", "off");
 			addAsk();
 		}		
 		
@@ -202,15 +216,34 @@ public class Opts
 	{
 		public static final int id = 7;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int GRAPH  = 0;
+		public static final int LEGEND = 1;		
+		public static final int MANUAL = 2;		
 		
 		public oColorsDetectOn()
 		{
 			setName("Wykrywaj kolory na podstawie", "Detect colors basing on");
-			addOpt("legendy", "legend");
 			addOpt("wykresu", "graph");
+			addOpt("legendy", "legend");			
+			addOpt("ręcznie", "manually");
+			addAsk();
+		}		
+		
+		@Override	public int ID()	{ return id; }		
+	}		
+				
+	public static class oColorsThreshold extends Option
+	{
+		public static final int id = 8;
+		
+		public static final int FIXED  = 0;
+		public static final int MANUAL = 1;			
+		
+		public oColorsThreshold()
+		{
+			setName("Włącz ręczne dobieranie progu podobieństwa kolorów", "Turn on manually adjusting color similarity threshold");
+			addOpt("stały próg", "fixed threshold");			
+			addOpt("ustawiaj próg ręcznie", "adjust threshold manually");
 			addAsk();
 		}		
 		
@@ -219,36 +252,37 @@ public class Opts
 				
 	public static class oDetectElements extends Option
 	{
-		public static final int id = 8;
+		public static final int id = 9;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int MANUAL = 0;		
+		public static final int GRAPH  = 1;
+		public static final int LEGEND = 2;		
 		
 		public oDetectElements()
 		{
 			setName("Wykrywaj kształty punktów na podstawie", "Detect points shapes basing on");
-			addOpt("legendy", "legend");
+			addOpt("ręcznie", "manually");
 			addOpt("wykresu", "graph");
+			addOpt("legendy", "legend");			
 			addAsk();
 		}		
 		
 		@Override	public int ID()	{ return id; }		
 	}		
 				
+	/*
 	public static class oLegendDetect extends Option
 	{
-		public static final int id = 9;
+		public static final int id = 10;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int AUTO = 0;
+		public static final int MANUAL = 1;
 		
 		public oLegendDetect()
 		{
 			setName("Wykrywanie legendy", "Legend detection");
-			addOpt("automatyczne", "automatic");
-			addOpt("ręczne", "manual");
+			addOpt("ręcznie", "manually");
+			addOpt("nie wykrywaj", "don't detect");
 			addAsk();
 		}		
 		
@@ -257,11 +291,10 @@ public class Opts
 					
 	public static class oLegendOCR extends Option
 	{
-		public static final int id = 10;
+		public static final int id = 11;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int DO = 0;
+		public static final int DONT = 1;
 		
 		public oLegendOCR()
 		{
@@ -272,15 +305,51 @@ public class Opts
 		}		
 		
 		@Override	public int ID()	{ return id; }		
-	}		
+	}	
+	*/
 					
-	public static class oGraphDetect extends Option
+	public static class oRemoveTrash extends Option
+	{
+		public static final int id = 10;
+		
+		public static final int NO  = 0;
+		public static final int YES = 1;
+		
+		public oRemoveTrash()
+		{
+			setName("Ręczne usuwanie zbędnych elementów obrazka", "Manual removing of redundant parts of the image");
+			addOpt("wyłącz", "off");
+			addOpt("włącz", "on");
+			addAsk();
+		}		
+		
+		@Override	public int ID()	{ return id; }		
+	}					
+					
+	public static class oRemoveColors extends Option
 	{
 		public static final int id = 11;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int NO  = 0;
+		public static final int YES = 1;
+		
+		public oRemoveColors()
+		{
+			setName("Ręczne usuwanie zbędnych kolorów na wykresie", "Manual removing of redundant colors from the graph");
+			addOpt("wyłącz", "off");
+			addOpt("włącz", "on");
+			addAsk();
+		}		
+		
+		@Override	public int ID()	{ return id; }		
+	}					
+	
+	public static class oGraphDetect extends Option
+	{
+		public static final int id = 12;
+		
+		public static final int AUTO = 0;
+		public static final int MANUAL = 1;
 		
 		public oGraphDetect()
 		{
@@ -295,18 +364,16 @@ public class Opts
 					
 	public static class oAxisXDetect extends Option
 	{
-		public static final int id = 12;
+		public static final int id = 13;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int DONT = 0;		
+		public static final int MANUAL = 1;
 		
 		public oAxisXDetect()
 		{
 			setName("Wykrywanie podpisu osi X", "Axis X's description detection");
-			addOpt("automatyczne", "automatic");
+			addOpt("nie wykrywaj", "don't detect");			
 			addOpt("ręczne", "manual");
-			addOpt("nie wykrywaj", "don't detect");
 			addAsk();
 		}		
 		
@@ -315,18 +382,16 @@ public class Opts
 					
 	public static class oAxisYDetect extends Option
 	{
-		public static final int id = 13;
+		public static final int id = 14;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int DONT = 0;		
+		public static final int MANUAL = 1;
 		
 		public oAxisYDetect()
 		{
 			setName("Wykrywanie podpisu osi Y", "Axis Y's description detection");
-			addOpt("automatyczne", "automatic");
+			addOpt("nie wykrywaj", "don't detect");			
 			addOpt("ręczne", "manual");
-			addOpt("nie wykrywaj", "don't detect");
 			addAsk();
 		}		
 		
@@ -335,18 +400,16 @@ public class Opts
 						
 	public static class oAxisXValue extends Option
 	{
-		public static final int id = 14;
+		public static final int id = 15;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int DONT = 0;		
+		public static final int MANUAL = 1;
 		
 		public oAxisXValue()
 		{
 			setName("Wykrywanie wartości osi X", "Axis X's values detection");
-			addOpt("automatyczne", "automatic");
+			addOpt("nie wykrywaj", "don't detect");			
 			addOpt("ręczne", "manual");
-			addOpt("nie wykrywaj", "don't detect");
 			addAsk();
 		}		
 		
@@ -355,18 +418,16 @@ public class Opts
 						
 	public static class oAxisYValue extends Option
 	{
-		public static final int id = 15;
+		public static final int id = 16;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int DONT = 0;		
+		public static final int MANUAL = 1;
 		
 		public oAxisYValue()
 		{
 			setName("Wykrywanie wartości osi Y", "Axis Y's values detection");
-			addOpt("automatyczne", "automatic");
+			addOpt("nie wykrywaj", "don't detect");			
 			addOpt("ręczne", "manual");
-			addOpt("nie wykrywaj", "don't detect");
 			addAsk();
 		}		
 		
@@ -375,11 +436,11 @@ public class Opts
 						
 	public static class oAxisXValueDir extends Option
 	{
-		public static final int id = 16;
+		public static final int id = 17;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int H = 0;
+		public static final int V = 1;
+		public static final int AUTO = 2;
 		
 		public oAxisXValueDir()
 		{
@@ -395,11 +456,11 @@ public class Opts
 						
 	public static class oAxisYValueDir extends Option
 	{
-		public static final int id = 17;
+		public static final int id = 18;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int H = 0;
+		public static final int V = 1;
+		public static final int AUTO = 2;
 		
 		public oAxisYValueDir()
 		{
@@ -415,31 +476,31 @@ public class Opts
 						
 	public static class oTitleDetect extends Option
 	{
-		public static final int id = 18;
+		public static final int id = 19;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int DONT = 0;		
+		public static final int MANUAL = 1;
 		
 		public oTitleDetect()
 		{
 			setName("Wykrywanie tytułu", "Title detection");
-			addOpt("automatyczne", "automatic");
+			addOpt("nie wykrywaj", "don't detect");			
 			addOpt("ręczne", "manual");
-			addOpt("nie wykrywaj", "don't detect");
 			addAsk();
 		}		
 		
 		@Override	public int ID()	{ return id; }		
 	}		
-						
+				
+	/*
 	public static class oTitlePos extends Option
 	{
-		public static final int id = 19;
+		public static final int id = 20;
 		
-		public static final int MONO   = 0;
-		public static final int COLOR  = 1;
-		public static final int DETECT = 2;
+		public static final int TOP   = 0;
+		public static final int RIGHT  = 1;
+		public static final int BOTTOM = 2;
+		public static final int LEFT = 3;
 		
 		public oTitlePos()
 		{
@@ -453,6 +514,7 @@ public class Opts
 		
 		@Override	public int ID()	{ return id; }		
 	}		
+	*/
 
 	
 	
@@ -472,15 +534,14 @@ public class Opts
 		
 		options[oAfterEnd.id]        = new oAfterEnd();
 		options[oGraphType.id]       = new oGraphType();
-		options[oSubgraphsAmount.id] = new oSubgraphsAmount();
+			options[oGraphType.id].ask = Option.ASK_ALWAYS;
+		options[oMonoSegmentation.id] = new oMonoSegmentation();
 		
 		options[oSubgraphsColors.id] = new oSubgraphsColors();
 		options[oColorsDetectOn.id]  = new oColorsDetectOn();
+		options[oColorsThreshold.id] = new oColorsThreshold();
+		
 		options[oDetectElements.id]  = new oDetectElements();
-		
-		options[oLegendDetect.id]    = new oLegendDetect();
-		
-		options[oLegendOCR.id]       = new oLegendOCR();
 		options[oGraphDetect.id]     = new oGraphDetect();
 		options[oAxisXDetect.id]     = new oAxisXDetect();
 		
@@ -492,9 +553,9 @@ public class Opts
 		options[oAxisYValueDir.id]   = new oAxisYValueDir();
 		options[oTitleDetect.id]     = new oTitleDetect();
 
-		options[oTitlePos.id]       = new oTitlePos();
+		options[oRemoveTrash.id]    = new oRemoveTrash();
+		options[oRemoveColors.id]   = new oRemoveColors();
 
-		
 		return options;
 	}
 	
@@ -550,10 +611,16 @@ public class Opts
 		for (int i=0; i < opts.length; i++)
 			opts[i].enabled = true;
 		
-		if (opts[oGraphType.id].is(oGraphType.POINT))
-			opts[oSubgraphsAmount.id].enabled = false;
-			
-		
+		if (opts[oGraphType.id].is(oGraphType.LINE))
+		{
+			opts[oDetectElements.id].enabled = false;
+		}	
+				
+		if (opts[oColorsDetectOn.id].is(oColorsDetectOn.MANUAL))
+		{
+			opts[oColorsThreshold.id].enabled = false;
+		}	
+	
 		return opts;
 	}	
 	

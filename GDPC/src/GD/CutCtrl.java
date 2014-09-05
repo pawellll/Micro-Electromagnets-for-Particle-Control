@@ -93,10 +93,10 @@ public class CutCtrl extends Controller {
                 System.err.println("Hejo");
             }*/
             
-            if (i==5)
-            { 
-              Main.main.mainCrtl.chageController(new DigitCtrl(subImages));
-            }
+//            if (i==5)
+//            { 
+//              Main.main.mainCrtl.chageController(new DigitCtrl(subImages));
+//            }
 
             ++i; // zwieksza licznik akcji IMG_SELECTED
         }
